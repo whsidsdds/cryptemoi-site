@@ -3,485 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrypteMoi | Souveraineté Numérique Totale</title>
+    <title>CrypteMoi | L'Intégrité Numérique Souveraine</title>
     
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <style>
-        /* ===== SYSTÈME DE DESIGN HAUTE COUTURE ===== */
         :root {
             --bg: #000000;
-            --surface: #0a0a0a;
-            --surface-light: #161617;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1a6;
+            --surface: #050505;
+            --surface-hover: #0a0a0a;
+            --text-main: #ffffff;
+            --text-dim: #86868b;
             --text-dark: #424245;
-            --accent-blue: #0071e3;
-            --border: rgba(255, 255, 255, 0.08);
-            --ease-apple: cubic-bezier(0.25, 1, 0.5, 1);
+            --accent: #0071e3;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow-edge: 0 10px 30px rgba(0,0,0,0.5);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            line-height: 1.5;
-        }
-
-        /* Effet de grain de film pro */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.04;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .gradient-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
-        }
-
-        /* ===== NAVIGATION OPTIMISÉE ===== */
-        nav {
-            position: fixed;
-            top: 0; width: 100%; height: 60px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: saturate(180%) blur(20px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center;
-        }
-
-        .nav-inner {
-            width: 100%; max-width: 1100px;
-            margin: 0 auto; padding: 0 24px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .logo { 
-            font-weight: 900; font-size: 21px; 
-            letter-spacing: -1px; background: linear-gradient(to bottom, #fff, #888);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { 
-            text-decoration: none; color: var(--text-secondary); 
-            font-size: 13px; font-weight: 500; transition: 0.4s; 
-        }
-        .nav-links a:hover { color: var(--text-primary); }
-
-        /* ===== HERO SECTION DENSE ===== */
-        section { padding: 140px 24px; max-width: 1100px; margin: 0 auto; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
         
-        .hero { text-align: center; }
+        body { background: var(--bg); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
 
-        .badge-souverain {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 16px; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border); border-radius: 100px;
-            font-size: 11px; font-weight: 700; letter-spacing: 1px;
-            color: var(--text-secondary); margin-bottom: 48px;
-            text-transform: uppercase;
-        }
+        /* Background Noise */
+        .noise { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.03; z-index: 9999; background: url('https://grainy-gradients.vercel.app/noise.svg'); }
 
-        .hero h1 { 
-            font-size: clamp(48px, 11vw, 92px); font-weight: 800; 
-            letter-spacing: -0.05em; line-height: 0.95; margin-bottom: 32px; 
-        }
+        /* Header */
+        nav { position: fixed; top: 0; width: 100%; height: 64px; z-index: 1000; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); display: flex; align-items: center; }
+        .nav-content { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; font-size: 22px; letter-spacing: -1px; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--text-main); }
 
-        .hero p { 
-            font-size: clamp(20px, 4vw, 26px); color: var(--text-secondary); 
-            max-width: 750px; margin: 0 auto 80px; font-weight: 400;
-            line-height: 1.4;
-        }
+        /* Sections */
+        section { padding: 160px 24px; max-width: 1200px; margin: 0 auto; }
+        .centered { text-align: center; }
 
-        /* ===== IPHONE ULTRA DÉTAILLÉ ===== */
-        .phone-wrapper { 
-            position: relative; width: 320px; height: 650px; 
-            margin: 0 auto; perspective: 2000px; 
-        }
+        /* Typography */
+        h1 { font-size: clamp(50px, 12vw, 110px); font-weight: 900; letter-spacing: -0.06em; line-height: 0.9; margin-bottom: 40px; }
+        h2 { font-size: clamp(32px, 6vw, 64px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 30px; }
+        .tagline { color: var(--text-dim); font-size: clamp(20px, 3vw, 28px); max-width: 800px; margin: 0 auto 60px; font-weight: 400; }
+        .section-label { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
 
-        .iphone { 
-            width: 100%; height: 100%; background: #010101; 
-            border: 14px solid #1c1c1e; border-radius: 58px; 
-            box-shadow: 0 50px 120px -30px rgba(0,0,0,0.8), inset 0 0 4px rgba(255,255,255,0.1); 
-            overflow: hidden; display: flex; flex-direction: column; 
-            position: relative;
-        }
-
-        /* Reflet sur l'écran */
-        .iphone::after {
-            content: ""; position: absolute; top: 0; left: 0;
-            width: 200%; height: 100%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .screen { flex: 1; padding: 24px 20px; display: flex; flex-direction: column; background: #000; }
+        /* iPhone Display */
+        .mockup-container { position: relative; margin: 80px auto; width: 340px; height: 680px; perspective: 1500px; }
+        .iphone-frame { width: 100%; height: 100%; background: #000; border: 12px solid #1c1c1e; border-radius: 60px; position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.7), inset 0 0 10px rgba(255,255,255,0.05); overflow: hidden; }
+        .iphone-screen { height: 100%; padding: 25px; display: flex; flex-direction: column; }
+        .island { width: 100px; height: 28px; background: #000; margin: 0 auto 40px; border-radius: 20px; }
         
-        .dynamic-island { 
-            width: 100px; height: 30px; background: #000; 
-            margin: -4px auto 35px; border-radius: 20px; 
-        }
+        .chat-area { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .bubble { max-width: 85%; padding: 14px 18px; border-radius: 22px; font-size: 14px; opacity: 0; transform: translateY(20px); line-height: 1.4; }
+        .bubble.in { background: #1c1c1e; color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .bubble.out { background: #fff; color: #000; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
 
-        .chat-bubble { 
-            max-width: 88%; padding: 14px 18px; border-radius: 20px; 
-            font-size: 13.5px; margin-bottom: 14px; opacity: 0; 
-            transform: translateY(20px) scale(0.95);
-            line-height: 1.4;
-        }
+        /* Bento Grid Pro */
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; margin-top: 60px; }
+        .bento-item { background: var(--surface); border: 1px solid var(--border); border-radius: 32px; padding: 48px; transition: 0.5s var(--ease); position: relative; overflow: hidden; }
+        .bento-item:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-8px); background: var(--surface-hover); }
+        .bento-item i { width: 40px; height: 40px; color: var(--text-main); margin-bottom: 30px; stroke-width: 1.5; }
+        .bento-item h3 { font-size: 24px; margin-bottom: 16px; font-weight: 700; }
+        .bento-item p { color: var(--text-dim); font-size: 16px; }
 
-        .received { background: #1c1c1e; align-self: flex-start; border-bottom-left-radius: 4px; color: #fff; }
-        .sent { 
-            background: #fff; color: #000; align-self: flex-end; 
-            border-bottom-right-radius: 4px; font-weight: 500;
-        }
+        .w-full { grid-column: span 12; }
+        .w-8 { grid-column: span 8; }
+        .w-6 { grid-column: span 6; }
+        .w-4 { grid-column: span 4; }
 
-        .input-simu {
-            margin-top: auto; padding: 16px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 10px;
-        }
-        .input-bar {
-            flex: 1; background: #1c1c1e; height: 38px; border-radius: 20px;
-            padding-left: 15px; display: flex; align-items: center;
-            color: #555; font-size: 12px;
-        }
+        /* Manifesto */
+        .dark-box { background: #fff; color: #000; border-radius: 48px; padding: 100px 60px; margin: 100px 0; }
+        .dark-box h2 { color: #000; }
+        .dark-box p { font-size: 22px; max-width: 900px; color: #1d1d1f; }
 
-        /* ===== BENTO GRID MASSIVE & DÉTAILLÉE ===== */
-        .bento { 
-            display: grid; grid-template-columns: repeat(12, 1fr); 
-            grid-auto-rows: minmax(300px, auto); gap: 24px; margin-top: 120px; 
-        }
+        /* FAQ Section */
+        .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; text-align: left; }
+        .faq-item { border-bottom: 1px solid var(--border); padding-bottom: 30px; }
+        .faq-item h4 { font-size: 18px; margin-bottom: 12px; }
+        .faq-item p { color: var(--text-dim); font-size: 14px; }
 
-        .card { 
-            background: var(--surface); border: 1px solid var(--border); 
-            border-radius: 32px; padding: 40px; transition: 0.6s var(--ease-apple); 
-            display: flex; flex-direction: column; position: relative;
-            overflow: hidden;
-        }
+        /* Socials */
+        .social-grid { display: flex; justify-content: center; gap: 60px; margin: 60px 0; }
+        .social-link { color: var(--text-dim); text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 15px; transition: 0.4s; }
+        .social-link:hover { color: var(--text-main); transform: scale(1.1); }
+        .social-link span { font-size: 10px; font-weight: 800; letter-spacing: 2px; }
 
-        .card:hover { 
-            border-color: rgba(255,255,255,0.2); 
-            background: #0d0d0d; transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
+        /* CTA */
+        .btns { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
+        .btn { padding: 22px 44px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.4s var(--ease); display: flex; align-items: center; gap: 12px; border: none; cursor: pointer; }
+        .btn-white { background: #fff; color: #000; }
+        .btn-white:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255,255,255,0.1); }
+        .btn-outline { background: transparent; color: #fff; border: 1px solid var(--border); }
+        .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: #fff; }
 
-        .card i { color: var(--accent-blue); margin-bottom: 24px; width: 32px; height: 32px; }
-        .card h3 { font-size: 26px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.5px; }
-        .card p { color: var(--text-secondary); font-size: 16px; line-height: 1.6; }
+        footer { padding: 100px 24px; border-top: 1px solid var(--border); text-align: center; }
+        .footer-logo { font-size: 14px; font-weight: 800; color: var(--text-dark); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; }
 
-        .span-12 { grid-column: span 12; }
-        .span-8 { grid-column: span 8; }
-        .span-6 { grid-column: span 6; }
-        .span-4 { grid-column: span 4; }
-
-        /* Détails visuels dans les cartes */
-        .card-bg-icon {
-            position: absolute; bottom: -20px; right: -20px;
-            font-size: 150px; opacity: 0.02; transform: rotate(-15deg);
-        }
-
-        /* ===== MANIFESTO SECTION ===== */
-        .manifesto-box { 
-            background: #fff; color: #000; padding: 120px 60px; 
-            border-radius: 48px; margin-top: 140px; position: relative;
-        }
-
-        .manifesto-box h2 { 
-            font-size: clamp(36px, 6vw, 68px); font-weight: 900; 
-            letter-spacing: -0.05em; line-height: 0.9; margin-bottom: 48px; 
-        }
-
-        .manifesto-box p { 
-            font-size: 24px; line-height: 1.5; max-width: 850px; 
-            color: #1d1d1f; font-weight: 400;
-        }
-
-        /* ===== BOUTONS PRO ===== */
-        .cta-container { display: flex; gap: 20px; justify-content: center; margin-top: 60px; }
-        
-        .btn { 
-            padding: 20px 40px; border-radius: 100px; text-decoration: none; 
-            font-weight: 600; font-size: 16px; transition: 0.4s var(--ease-apple); 
-            cursor: pointer; display: flex; align-items: center; gap: 12px; 
-        }
-
-        .btn-primary { background: #fff; color: #000; }
-        .btn-primary:hover { background: var(--accent-blue); color: #fff; transform: scale(1.05); }
-
-        .btn-secondary { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
-
-        /* ===== RÉSEAUX SOCIAUX & FOOTER ===== */
-        .social-section {
-            margin-top: 150px; padding: 100px 24px; text-align: center;
-            border-top: 1px solid var(--border);
-        }
-
-        .social-links { display: flex; justify-content: center; gap: 50px; margin: 40px 0; }
-        
-        .social-item {
-            color: var(--text-secondary); text-decoration: none;
-            display: flex; flex-direction: column; align-items: center; gap: 12px;
-            transition: 0.4s var(--ease-apple);
-        }
-
-        .social-item i { width: 28px; height: 28px; }
-        .social-item span { font-size: 11px; font-weight: 800; letter-spacing: 2px; }
-        .social-item:hover { color: var(--accent-blue); transform: translateY(-8px); }
-
-        footer { padding: 80px 24px; text-align: center; border-top: 1px solid var(--border); }
-        .fr-label { font-size: 12px; font-weight: 700; color: var(--text-dark); letter-spacing: 3px; }
-
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
-            .span-8, .span-6, .span-4 { grid-column: span 12; }
-            .manifesto-box { padding: 60px 30px; }
-            .nav-links { display: none; }
+            .w-8, .w-6, .w-4 { grid-column: span 12; }
+            .faq-grid { grid-template-columns: 1fr; }
+            .dark-box { padding: 60px 30px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="gradient-canvas" id="canvas"></div>
+    <div class="noise"></div>
 
     <nav>
-        <div class="nav-inner">
+        <div class="nav-content">
             <div class="logo">CrypteMoi</div>
             <div class="nav-links">
-                <a href="#techno">Protocole</a>
-                <a href="#manifeste">Liberté</a>
-                <a href="#social">Communauté</a>
+                <a href="#hero">Découvrir</a>
+                <a href="#techno">Technologie</a>
+                <a href="#manifeste">Manifeste</a>
+                <a href="#faq">FAQ</a>
             </div>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="badge-souverain">
-            <i data-lucide="shield-check" style="width:14px; color:var(--accent-blue)"></i>
-            Protocole P2P Souverain • Édition 2026
-        </div>
+    <section id="hero" class="centered">
+        <span class="section-label">Lancement Mars 2026</span>
+        <h1>VOTRE PAROLE.<br><span style="color: var(--text-dark)">SANS TRACE.</span></h1>
+        <p class="tagline">Le premier protocole de messagerie français qui place l'anonymat technique au-dessus de tout. Pas de serveurs. Pas de logs. Juste vous.</p>
         
-        <h1 id="hero-title">VOTRE PAROLE.<br><span style="color: var(--text-dark);">SANS PERMISSION.</span></h1>
-        
-        <p id="hero-desc">La première infrastructure de messagerie décentralisée conçue pour protéger l'intimité des citoyens français. Pas de serveurs, pas de censure, aucune trace numérique.</p>
-
-        <div class="phone-wrapper" id="phoneWrapper">
-            <div class="iphone">
-                <div class="screen">
-                    <div class="dynamic-island"></div>
-                    
-                    <div style="text-align: center; margin-bottom: 40px;">
-                        <div style="font-weight: 800; font-size: 15px; letter-spacing: -0.5px;">Canal Privé</div>
-                        <div style="font-size: 9px; color: var(--accent-blue); font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px;">Transfert Peer-to-Peer</div>
-                    </div>
-                    
-                    <div class="chat-bubbles">
-                        <div class="chat-bubble received" id="m1">Comment CrypteMoi nous protège concrètement ?</div>
-                        <div class="chat-bubble sent" id="m2">On a supprimé le serveur. Tes messages vont directement de ton téléphone au mien.</div>
-                        <div class="chat-bubble received" id="m3">Et si quelqu'un veut intercepter la discussion ?</div>
-                        <div class="chat-bubble sent" id="m4">Ils ne verront que du vide. On utilise un chiffrement asymétrique incassable.</div>
-                    </div>
-
-                    <div class="input-simu">
-                        <i data-lucide="plus" style="color:#555; width:20px;"></i>
-                        <div class="input-bar">Message souverain...</div>
-                        <i data-lucide="mic" style="color:#555; width:20px;"></i>
+        <div class="mockup-container" id="phoneBox">
+            <div class="iphone-frame">
+                <div class="iphone-screen">
+                    <div class="island"></div>
+                    <div class="chat-area">
+                        <div class="bubble in" id="m1">Est-ce que l'État peut lire nos échanges ?</div>
+                        <div class="bubble out" id="m2">Sur CrypteMoi, personne ne peut. Même pas nous.</div>
+                        <div class="bubble in" id="m3">Et vos serveurs ?</div>
+                        <div class="bubble out" id="m4">Quels serveurs ? Tes données ne quittent jamais ton téléphone.</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="cta-container">
-            <div class="btn btn-primary" onclick="alertStore('App Store')">
-                <i data-lucide="apple"></i> App Store
+        <div class="btns">
+            <button class="btn btn-white" onclick="alertMsg()"><i data-lucide="apple"></i> App Store</button>
+            <button class="btn btn-outline" onclick="alertMsg()"><i data-lucide="play"></i> Google Play</button>
+        </div>
+    </section>
+
+    <section id="techno">
+        <span class="section-label">Infrastructure</span>
+        <h2>L'architecture du vide.</h2>
+        <div class="bento-grid">
+            <div class="bento-item w-8">
+                <i data-lucide="unplug"></i>
+                <h3>Protocole Peer-to-Peer Natif</h3>
+                <p>Oubliez le Cloud. Vos messages transitent par un réseau maillé où chaque smartphone devient son propre serveur temporaire. Dès que le message est reçu, la clé de transport est détruite à jamais.</p>
             </div>
-            <div class="btn btn-secondary" onclick="alertStore('Google Play')">
-                <i data-lucide="play"></i> Google Play
+            <div class="bento-item w-4">
+                <i data-lucide="shield-alert"></i>
+                <h3>Zero-Knowledge</h3>
+                <p>Nous ne savons pas qui vous êtes, à qui vous parlez, ni quand. Votre identité est un hachage matériel unique.</p>
+            </div>
+            <div class="bento-item w-4">
+                <i data-lucide="key-round"></i>
+                <h3>Double AES-256</h3>
+                <p>Chiffrement de bout en bout renforcé par une seconde couche de protection physique locale.</p>
+            </div>
+            <div class="bento-item w-8">
+                <i data-lucide="map"></i>
+                <h3>Souveraineté Géographique</h3>
+                <p>Les données ne franchissent jamais les frontières françaises. CrypteMoi utilise exclusivement les infrastructures réseau nationales pour garantir une protection juridique totale contre les lois d'interception étrangères.</p>
+            </div>
+            <div class="bento-item w-6">
+                <i data-lucide="zap"></i>
+                <h3>Épuration Instantanée</h3>
+                <p>Un mode "Urgence" permet de purger l'intégralité de la mémoire allouée à l'application en moins de 100ms.</p>
+            </div>
+            <div class="bento-item w-6">
+                <i data-lucide="ghost"></i>
+                <h3>Métadonnées Invisibles</h3>
+                <p>Nous supprimons les en-têtes IP et les signatures temporelles avant chaque transmission.</p>
             </div>
         </div>
     </section>
 
     <section id="manifeste">
-        <div class="manifesto-box" id="reveal-manifesto">
-            <h2>L'intimité est un droit,<br>pas une option négociable.</h2>
+        <div class="dark-box" id="revealBox">
+            <span class="section-label" style="color: #555;">Notre Vision</span>
+            <h2>La vie privée n'est pas un luxe, c'est une nécessité démocratique.</h2>
             <p>
-                Dans un monde où chaque mot est analysé et stocké, CrypteMoi redéfinit la messagerie. Nous ne stockons pas vos données, car nous n'avons aucun endroit où les mettre. 
+                Dans un monde saturé par la surveillance algorithmique, CrypteMoi redonne le pouvoir aux citoyens. Nous croyons qu'une discussion privée doit rester privée, comme si vous parliez dans une pièce close et isolée. 
                 <br><br>
-                En utilisant le maillage matériel français, CrypteMoi crée une zone franche numérique. Discutez, partagez, vivez sans la peur d'être observé ou jugé par un algorithme.
+                Notre mission est de fournir l'outil de résistance numérique le plus simple et le plus puissant jamais créé pour le territoire français.
             </p>
         </div>
     </section>
 
-    <section id="techno">
-        <div style="margin-bottom: 80px;">
-            <h2 style="font-size: 48px; font-weight: 800; letter-spacing: -2px;">Ingénierie de pointe.</h2>
-            <p style="color: var(--text-secondary); font-size: 18px;">Détails techniques du protocole CrypteMoi.</p>
-        </div>
-
-        <div class="bento">
-            <div class="card span-8">
-                <i data-lucide="cpu"></i>
-                <h3>Architecture Zero-Trace</h3>
-                <p>À l'inverse des messageries classiques, CrypteMoi ne possède pas de serveurs centraux. Vos messages transitent par des nœuds cryptographiques éphémères. Aucune archive, aucun log, aucun historique n'est conservé en dehors de votre appareil physique.</p>
-                <div class="card-bg-icon"><i data-lucide="cpu"></i></div>
+    <section id="faq">
+        <span class="section-label">Questions Fréquentes</span>
+        <h2>Tout savoir.</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h4>Est-ce vraiment gratuit ?</h4>
+                <p>Oui. CrypteMoi est un projet financé par une fondation pour la souveraineté numérique. Pas de pub, pas de vente de données.</p>
             </div>
-
-            <div class="card span-4">
-                <i data-lucide="fingerprint"></i>
-                <h3>Hardware Bonding</h3>
-                <p>Votre identité numérique est générée à partir de la signature matérielle de votre smartphone. Pas de compte, pas de mot de passe à voler.</p>
+            <div class="faq-item">
+                <h4>Puis-je l'utiliser à l'étranger ?</h4>
+                <p>Le protocole est optimisé pour le réseau français, mais il fonctionnera partout où vous disposez d'un accès internet sécurisé.</p>
             </div>
-
-            <div class="card span-6">
-                <i data-lucide="lock"></i>
-                <h3>Double Chiffrement AES-256</h3>
-                <p>Chaque média ou texte envoyé est verrouillé par une double couche de chiffrement de grade militaire. Seul le destinataire final possède la clé de déchiffrement, générée localement.</p>
+            <div class="faq-item">
+                <h4>Comment récupérer mes messages ?</h4>
+                <p>C'est impossible. Si vous perdez votre téléphone ou supprimez l'app, vos messages disparaissent. C'est la garantie de sécurité absolue.</p>
             </div>
-
-            <div class="card span-6">
-                <i data-lucide="map-pin"></i>
-                <h3>Isolation Géographique</h3>
-                <p>CrypteMoi utilise exclusivement le réseau d'infrastructure français. Vos données ne franchissent jamais les frontières, restant sous la protection des lois de souveraineté les plus strictes.</p>
-            </div>
-
-            <div class="card span-4">
-                <i data-lucide="eye-off"></i>
-                <h3>Mode Inconnu</h3>
-                <p>Pas de "vu", pas de "est en train d'écrire". La messagerie retrouve son calme originel.</p>
-            </div>
-
-            <div class="card span-8">
-                <i data-lucide="trash-2"></i>
-                <h3>Épuration Atomique</h3>
-                <p>Une fonction unique permet d'envoyer un signal de purge qui efface irréversiblement une discussion sur les deux appareils simultanément, réécrivant les secteurs de mémoire pour empêcher toute récupération forensique.</p>
+            <div class="faq-item">
+                <h4>Faut-il un numéro de téléphone ?</h4>
+                <p>Non. Aucun numéro, aucun email. Juste un pseudo et une clé générée par votre appareil.</p>
             </div>
         </div>
     </section>
 
-    <section class="social-section" id="social">
-        <p style="font-size: 11px; color: var(--text-dark); letter-spacing: 4px; font-weight: 900; text-transform: uppercase;">Suivre le mouvement</p>
-        
-        <div class="social-links">
-            <a href="https://x.com/cryptemoi" class="social-item" target="_blank">
-                <i data-lucide="twitter"></i>
-                <span>X / Twitter</span>
+    <section id="social" class="centered">
+        <span class="section-label">Nous Suivre</span>
+        <h2>Rejoignez le mouvement.</h2>
+        <div class="social-grid">
+            <a href="https://x.com/cryptemoi" class="social-link" target="_blank">
+                <i data-lucide="twitter"></i><span>X / TWITTER</span>
             </a>
-            <a href="https://instagram.com/cryptemoi" class="social-item" target="_blank">
-                <i data-lucide="instagram"></i>
-                <span>Instagram</span>
+            <a href="https://instagram.com/cryptemoi" class="social-link" target="_blank">
+                <i data-lucide="instagram"></i><span>INSTAGRAM</span>
             </a>
-            <a href="https://tiktok.com/@cryptemoi" class="social-item" target="_blank">
-                <i data-lucide="music-2"></i>
-                <span>TikTok</span>
+            <a href="https://tiktok.com/@cryptemoi" class="social-link" target="_blank">
+                <i data-lucide="music-2"></i><span>TIKTOK</span>
             </a>
         </div>
-        
-        <h3 style="font-size: 32px; font-weight: 800;">@cryptemoi</h3>
-        <p style="color: var(--text-secondary); margin-top: 10px;">Rejoignez les 200,000 citoyens déjà inscrits sur la liste d'attente.</p>
+        <h3>@cryptemoi</h3>
     </section>
 
     <footer>
-        <div class="fr-label">SOUVERAINETÉ NUMÉRIQUE • RÉPUBLIQUE FRANÇAISE • 2026</div>
-        <p style="color: var(--text-dark); font-size: 12px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
-            CrypteMoi est un projet indépendant visant à garantir l'article 9 du Code civil sur le respect de la vie privée dans l'espace numérique.
-        </p>
+        <div class="footer-logo">CrypteMoi • 2026</div>
+        <p style="color: var(--text-dark); font-size: 11px;">Propulsé par le protocole de chiffrement français. Tous droits réservés.</p>
     </footer>
 
     <script>
-        // Initialisation des icônes
         lucide.createIcons();
-
-        // Enregistrement de GSAP
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. Animation du Titre Hero (Apparition lettre par lettre possible, ici fondu puissant)
-        gsap.from("#hero-title", { opacity: 0, y: 50, duration: 1.2, ease: "power4.out", delay: 0.2 });
-        gsap.from("#hero-desc", { opacity: 0, y: 30, duration: 1.2, ease: "power4.out", delay: 0.5 });
+        // Hero Animation
+        gsap.from("h1", { y: 100, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.3 });
+        gsap.from(".tagline", { y: 30, opacity: 0, duration: 1, ease: "power3.out", delay: 0.6 });
 
-        // 2. Animation Séquentielle du Chat (Se déclenche au scroll)
-        const chatTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".phone-wrapper",
-                start: "top 75%",
-            }
-        });
+        // Chat Animation
+        const tl = gsap.timeline({ scrollTrigger: { trigger: ".mockup-container", start: "top 80%" }});
+        tl.to("#m1", { opacity: 1, y: 0, duration: 0.6 })
+          .to("#m2", { opacity: 1, y: 0, duration: 0.6 }, "+=0.3")
+          .to("#m3", { opacity: 1, y: 0, duration: 0.6 }, "+=0.8")
+          .to("#m4", { opacity: 1, y: 0, duration: 0.6 }, "+=0.3");
 
-        chatTl.to("#m1", { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)" })
-              .to("#m2", { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, "+=0.4")
-              .to("#m3", { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, "+=0.8")
-              .to("#m4", { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, "+=0.4");
-
-        // 3. Effet de Parallaxe 3D sur l'iPhone (Smooth)
+        // Parallax iPhone
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 45;
-            const y = (window.innerHeight / 2 - e.pageY) / 45;
-            
-            gsap.to("#phoneWrapper", {
-                rotationY: x,
-                rotationX: -y,
-                duration: 1.2,
-                ease: "power2.out"
-            });
+            const x = (window.innerWidth / 2 - e.pageX) / 40;
+            const y = (window.innerHeight / 2 - e.pageY) / 40;
+            gsap.to("#phoneBox", { rotationY: x, rotationX: -y, duration: 1.5, ease: "power2.out" });
         });
 
-        // 4. Reveal des cartes Bento
-        gsap.utils.toArray('.card').forEach(card => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 90%",
-                },
-                opacity: 0,
-                y: 40,
-                duration: 0.8,
-                ease: "power3.out"
-            });
+        // Reveal Cards
+        gsap.utils.toArray('.bento-item').forEach(card => {
+            gsap.from(card, { scrollTrigger: { trigger: card, start: "top 90%" }, opacity: 0, y: 50, duration: 0.8 });
         });
 
-        // 5. Reveal Manifesto
-        gsap.from("#reveal-manifesto", {
-            scrollTrigger: {
-                trigger: "#reveal-manifesto",
-                start: "top 80%",
-            },
-            opacity: 0,
-            scale: 0.95,
-            duration: 1,
-            ease: "power2.out"
-        });
+        // Reveal Manifesto
+        gsap.from("#revealBox", { scrollTrigger: { trigger: "#revealBox", start: "top 80%" }, opacity: 0, scale: 0.95, duration: 1 });
 
-        // Fonctions d'interaction
-        function alertStore(store) {
-            alert("CrypteMoi est en cours de certification finale.\n\nDisponibilité sur " + store + " : Mars 2026.\n\nVotre patience est le prix de votre souveraineté.");
+        function alertMsg() {
+            alert("CrypteMoi est en cours de déploiement.\nDisponible sur les stores en Mars 2026.");
         }
-
-        // Changement de couleur du fond au scroll
-        window.addEventListener('scroll', () => {
-            const canvas = document.getElementById('canvas');
-            if (window.scrollY > 1000) {
-                canvas.style.background = "radial-gradient(circle at 50% 50%, #001226 0%, #000 100%)";
-            } else {
-                canvas.style.background = "radial-gradient(circle at 50% 50%, #111 0%, #000 100%)";
-            }
-        });
     </script>
 </body>
 </html>
