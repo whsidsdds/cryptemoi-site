@@ -1,87 +1,110 @@
 /**
- * script.js - Logique d'interaction pour CrypteMoi
- * Gère les animations, les effets 3D et le défilement fluide.
+ * script.js - Logique d'interaction CrypteMoi (Édition Souveraine)
+ * Gère le séquençage du chat P2P, l'immersion 3D et la protection des données.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    
     // 1. Initialisation des icônes Lucide
-    // Cette fonction remplace les balises <i data-lucide="..."> par des SVG
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
 
-    // 2. Gestion de la barre de navigation au défilement
+    // 2. Navigation : Effet de verre au défilement
     const nav = document.getElementById('mainNav');
-    const handleScroll = () => {
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            nav.style.background = "rgba(0, 0, 0, 0.9)";
+            nav.style.borderBottom = "1px solid rgba(255, 255, 255, 0.1)";
         } else {
-            nav.classList.remove('scrolled');
+            nav.style.background = "rgba(0, 0, 0, 0.8)";
+            nav.style.borderBottom = "1px solid rgba(255, 255, 255, 0.05)";
         }
+    });
+
+    // 3. Simulation du Chat P2P (Séquençage temporel)
+    const chatBubbles = document.querySelectorAll('.chat-bubble');
+    const animateChat = () => {
+        chatBubbles.forEach((bubble, index) => {
+            setTimeout(() => {
+                bubble.style.opacity = "1";
+                bubble.style.transform = "translateY(0)";
+                // Petit effet de vibration bleue lors de la réception
+                if (bubble.classList.contains('received')) {
+                    bubble.style.borderLeft = "2px solid #0071e3";
+                }
+            }, 1000 * (index + 1));
+        });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Lancer l'animation du chat dès que le téléphone est visible
+    const chatObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            animateChat();
+            chatObserver.unobserve(entries[0].target);
+        }
+    }, { threshold: 0.5 });
 
-    // 3. Effet d'inclinaison 3D sur le téléphone (Hero Section)
-    const phone = document.getElementById('heroPhone');
-    
+    const phone = document.getElementById('phoneWrapper');
+    if (phone) chatObserver.observe(phone);
+
+    // 4. Effet 3D Immersif (Gyroscope de souris)
     if (phone) {
         document.addEventListener('mousemove', (e) => {
-            // Calcul de la position de la souris par rapport au centre de l'écran
-            // On divise par 30 pour limiter l'amplitude du mouvement
-            const x = (window.innerWidth / 2 - e.pageX) / 30;
-            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            // Amplitude réduite pour un aspect plus "Luxe/Pro"
+            const x = (window.innerWidth / 2 - e.pageX) / 45;
+            const y = (window.innerHeight / 2 - e.pageY) / 45;
             
-            // Applique la rotation 3D
-            // On garde une rotation de base de 5deg sur l'axe X pour le look "penché"
-            phone.style.transform = `rotateX(${5 + y}deg) rotateY(${-x}deg)`;
+            phone.style.transition = "transform 0.1s ease-out";
+            phone.style.transform = `rotateX(${y}deg) rotateY(${-x}deg)`;
         });
 
-        // Réinitialisation douce quand la souris quitte la fenêtre
         document.addEventListener('mouseleave', () => {
-            phone.style.transform = `rotateX(5deg) rotateY(0deg)`;
+            phone.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
+            phone.style.transform = `rotateX(0deg) rotateY(0deg)`;
         });
     }
 
-    // 4. Système de "Reveal" (Apparition au défilement)
-    // Utilise l'API IntersectionObserver pour détecter quand les éléments sont visibles
+    // 5. Gestion des accès Stores (Alerte France 2026)
+    window.alertFrance = () => {
+        const msg = "CrypteMoi : Souveraineté confirmée.\n\nL'application est en cours de déploiement final pour le territoire français.\nDisponibilité prévue : Premier trimestre 2026.";
+        alert(msg);
+    };
+
+    // 6. Reveal System (Apparition fluide des sections)
+    const revealElements = document.querySelectorAll('.card, .manifesto-box, .hero h1');
     const revealOptions = {
-        threshold: 0.1, // L'élément doit être visible à 10%
-        rootMargin: "0px 0px -50px 0px" // Déclenche un peu avant l'arrivée en bas de l'écran
+        threshold: 0.15,
+        rootMargin: "0px 0px -20px 0px"
     };
 
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-                // Optionnel : on arrête d'observer une fois l'animation jouée
-                // revealObserver.unobserve(entry.target);
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+                entry.target.style.transition = "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)";
+                revealObserver.unobserve(entry.target);
             }
         });
     }, revealOptions);
 
-    // On applique l'observateur à tous les éléments ayant la classe .reveal
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach(el => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(30px)";
+        revealObserver.observe(el);
+    });
 
-    // 5. Gestion des ancres de navigation fluides (Smooth Scroll)
-    const navLinks = document.querySelectorAll('.nav-menu a, .nav-cta');
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-            
-            // On ne gère que les liens internes commençant par #
-            if (href.startsWith('#')) {
-                e.preventDefault();
-                const targetId = href.substring(1);
-                const targetElement = document.getElementById(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 70, // -70 pour compenser la hauteur de la nav
-                        behavior: 'smooth'
-                    });
-                }
+    // 7. Smooth Scroll pour les ancres
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 60,
+                    behavior: 'smooth'
+                });
             }
         });
     });
