@@ -1,236 +1,83 @@
 /**
- * CrypteMoi - Système Logiciel de l'Interface
- * Script principal gérant l'interactivité avancée, le curseur matériel et la navigation.
- * @version 1.0.0
+ * CrypteMoi - Système d'Interface Apple-Style
+ * Script principal gérant les animations fluides et interactions
+ * @version 2.0.0
  * @author CrypteMoi Team
  */
 
 (function() {
     'use strict';
 
-    // ===== CONFIGURATION & CONSTANTES =====
+    // ===== CONFIGURATION =====
     const CONFIG = {
-        particles: {
-            count: 50,
-            minDuration: 5,
-            maxDuration: 15
-        },
-        parallax: {
-            intensity: 40,
-            glowMultiplier: 5
-        },
         observer: {
-            threshold: 0.4
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
         },
-        lever: {
-            trackHeight: 250
+        scroll: {
+            navbarThreshold: 50
         }
     };
 
     // ===== SÉLECTION DES ÉLÉMENTS DOM =====
-    let cursor, handle, sections, cards, glow, particlesContainer;
+    let navbar, revealElements, problemCards, navbar, sections;
 
     /**
      * Initialisation des références DOM
      */
     const initDOMReferences = () => {
-        cursor = document.getElementById('custom-cursor');
-        handle = document.getElementById('leverHandle');
+        navbar = document.getElementById('navbar');
+        revealElements = document.querySelectorAll('.reveal');
+        problemCards = document.querySelectorAll('.problem-card');
         sections = document.querySelectorAll('section');
-        cards = document.querySelectorAll('.float-card');
-        glow = document.querySelector('.glow');
-        particlesContainer = document.getElementById('particles');
     };
 
-    // ===== SYSTÈME DE PARTICULES =====
+    // ===== SCROLL REVEAL ANIMATIONS =====
     /**
-     * Génération de particules animées dans le fond
+     * Animation de révélation au scroll avec Intersection Observer
      */
-    const createParticles = () => {
-        if (!particlesContainer) return;
-
-        const fragment = document.createDocumentFragment();
-        
-        for (let i = 0; i < CONFIG.particles.count; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            
-            // Position aléatoire
-            particle.style.left = `${Math.random() * 100}%`;
-            
-            // Durée d'animation aléatoire
-            const duration = Math.random() * 
-                (CONFIG.particles.maxDuration - CONFIG.particles.minDuration) + 
-                CONFIG.particles.minDuration;
-            particle.style.animationDuration = `${duration}s`;
-            
-            // Délai aléatoire pour un effet échelonné
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            
-            fragment.appendChild(particle);
-        }
-        
-        particlesContainer.appendChild(fragment);
-    };
-
-    // ===== CURSEUR PERSONNALISÉ =====
-    /**
-     * Initialisation du curseur matériel personnalisé
-     * Injection du logo CrypteMoi (C + Personne + Cadenas)
-     */
-    const initCursor = () => {
-        if (!cursor) return;
-        
-        cursor.innerHTML = `
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <!-- Cercle extérieur (Lettre C stylisée) -->
-                <path d="M78 30C72 20 62 15 50 15C30.7 15 15 30.7 15 50C15 69.3 30.7 85 50 85C62 85 72 80 78 70" 
-                      stroke="white" stroke-width="7" stroke-linecap="round" fill="none"/>
-                <!-- Icône utilisateur centrale -->
-                <circle cx="50" cy="42" r="10" fill="white"/>
-                <path d="M35 65C35 58 40 53 50 53C60 53 65 58 65 65" fill="white"/>
-                <!-- Symbole Cadenas (Base) -->
-                <rect x="42" y="68" width="16" height="12" rx="2" fill="white"/>
-                <!-- Anse du cadenas -->
-                <path d="M45 68V65C45 62.2 47.2 60 50 60C52.8 60 55 62.2 55 65V68" 
-                      stroke="white" stroke-width="2.5" fill="none"/>
-            </svg>
-        `;
-    };
-
-    /**
-     * Gestion du mouvement du curseur avec effet de parallaxe
-     */
-    const initCursorMovement = () => {
-        let mouseX = 0, mouseY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            // Mise à jour de la position du curseur
-            if (cursor) {
-                cursor.style.left = `${mouseX}px`;
-                cursor.style.top = `${mouseY}px`;
-            }
-
-            // Calcul des angles pour l'effet de profondeur (Parallaxe)
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-
-            const rotateY = (mouseX - centerX) / CONFIG.parallax.intensity;
-            const rotateX = (centerY - mouseY) / CONFIG.parallax.intensity;
-
-            // Application de la rotation aux cartes flottantes
-            if (cards) {
-                cards.forEach(card => {
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                });
-            }
-
-            // Déplacement de la lueur d'arrière-plan
-            if (glow) {
-                const glowX = rotateY * CONFIG.parallax.glowMultiplier;
-                const glowY = -rotateX * CONFIG.parallax.glowMultiplier;
-                glow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
-            }
-        });
-    };
-
-    /**
-     * Interactions tactiles sur le curseur
-     */
-    const initCursorInteractions = () => {
-        if (!cursor) return;
-
-        document.addEventListener('mousedown', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(0.85)';
-        });
-
-        document.addEventListener('mouseup', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-        });
-    };
-
-    // ===== EFFETS SUR LES CARTES =====
-    /**
-     * Gestion des effets de survol sur les cartes
-     */
-    const initCardEffects = () => {
-        if (!cards) return;
-
-        cards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.zIndex = '10';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.zIndex = '1';
-            });
-        });
-    };
-
-    // ===== SYSTÈME DE NAVIGATION =====
-    /**
-     * Observation des sections avec Intersection Observer
-     * Détecte quelle section est visible pour déplacer le levier
-     */
-    const initSectionObserver = () => {
-        if (!sections || sections.length === 0) return;
-
+    const initScrollReveal = () => {
         const observerOptions = {
-            root: null,
-            threshold: CONFIG.observer.threshold
+            threshold: CONFIG.observer.threshold,
+            rootMargin: CONFIG.observer.rootMargin
         };
 
-        const sectionObserver = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Animation de révélation
+                    entry.target.classList.add('active');
                     entry.target.classList.add('visible');
-
-                    // Mise à jour de la position du levier
-                    updateLeverPosition(entry.target);
+                    
+                    // Désactiver l'observer pour cet élément (animation une seule fois)
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        sections.forEach(section => sectionObserver.observe(section));
+        // Observer tous les éléments avec classe 'reveal' et 'problem-card'
+        revealElements.forEach(el => observer.observe(el));
+        problemCards.forEach(el => observer.observe(el));
     };
 
+    // ===== NAVBAR SCROLL EFFECT =====
     /**
-     * Mise à jour de la position du levier en fonction de la section active
-     * @param {HTMLElement} activeSection - Section actuellement visible
+     * Effet de transparence et ombre sur la navbar au scroll
      */
-    const updateLeverPosition = (activeSection) => {
-        if (!handle || !sections) return;
+    const initNavbarScroll = () => {
+        if (!navbar) return;
 
-        const index = Array.from(sections).indexOf(activeSection);
-        const position = (index / (sections.length - 1)) * CONFIG.lever.trackHeight;
-        
-        handle.style.top = `${position}px`;
-    };
-
-    /**
-     * Navigation au clic sur le levier
-     */
-    const initLeverNavigation = () => {
-        if (!handle || !sections) return;
-
-        handle.addEventListener('click', () => {
-            const currentTop = parseFloat(handle.style.top) || 0;
-            const currentIndex = Math.round((currentTop / CONFIG.lever.trackHeight) * (sections.length - 1));
-            const nextIndex = (currentIndex + 1) % sections.length;
-            
-            sections[nextIndex].scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'center'
-            });
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > CONFIG.scroll.navbarThreshold) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
         });
     };
 
+    // ===== SMOOTH SCROLL =====
     /**
-     * Smooth scroll pour les liens d'ancrage
+     * Défilement fluide pour tous les liens d'ancrage
      */
     const initSmoothScroll = () => {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -238,65 +85,292 @@
                 e.preventDefault();
                 
                 const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
                 const target = document.querySelector(targetId);
                 
                 if (target) {
-                    target.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
+                    const offsetTop = target.offsetTop - 80; // Offset pour la navbar fixe
+                    
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
                     });
                 }
             });
         });
     };
 
-    // ===== ANIMATION DE CHARGEMENT =====
+    // ===== PARALLAX SUBTIL SUR HERO =====
     /**
-     * Révèle la première section après le chargement
+     * Effet parallaxe léger sur la section hero
+     */
+    const initParallax = () => {
+        const hero = document.querySelector('.hero');
+        if (!hero) return;
+
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.scrollY;
+                    const parallaxSpeed = 0.5;
+                    
+                    if (scrolled < window.innerHeight) {
+                        hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+                        hero.style.opacity = 1 - (scrolled / window.innerHeight);
+                    }
+                    
+                    ticking = false;
+                });
+                
+                ticking = true;
+            }
+        });
+    };
+
+    // ===== ANIMATION DES CARTES PROBLÈME =====
+    /**
+     * Animation échelonnée des cartes de problème
+     */
+    const initProblemCardsAnimation = () => {
+        problemCards.forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+    };
+
+    // ===== BOUTONS STORE INTERACTION =====
+    /**
+     * Effets d'interaction sur les boutons de téléchargement
+     */
+    const initStoreButtons = () => {
+        const storeButtons = document.querySelectorAll('.store-btn');
+        
+        storeButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+
+            // Effet de clic
+            btn.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(-3px) scale(0.98)';
+            });
+
+            btn.addEventListener('mouseup', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+        });
+    };
+
+    // ===== DÉTECTION MOBILE =====
+    /**
+     * Détecte si l'utilisateur est sur mobile et ajuste les animations
+     */
+    const initMobileDetection = () => {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            document.body.classList.add('mobile');
+            
+            // Désactiver le parallaxe sur mobile pour de meilleures performances
+            CONFIG.observer.threshold = 0.1;
+        }
+    };
+
+    // ===== SECTION ACTIVE TRACKING =====
+    /**
+     * Suivi de la section active pour mettre à jour la navigation
+     */
+    const initSectionTracking = () => {
+        if (!sections || sections.length === 0) return;
+
+        const navLinks = document.querySelectorAll('.nav-links a');
+        
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '-100px 0px -66% 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.getAttribute('id');
+                    
+                    // Mettre à jour les liens actifs
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            if (section.id) {
+                sectionObserver.observe(section);
+            }
+        });
+    };
+
+    // ===== ANIMATION COMPTEUR =====
+    /**
+     * Animation de compteur pour les statistiques (si besoin futur)
+     */
+    const animateCounter = (element, target, duration = 2000) => {
+        let start = 0;
+        const increment = target / (duration / 16);
+        
+        const timer = setInterval(() => {
+            start += increment;
+            element.textContent = Math.floor(start).toLocaleString();
+            
+            if (start >= target) {
+                element.textContent = target.toLocaleString();
+                clearInterval(timer);
+            }
+        }, 16);
+    };
+
+    // ===== PERFORMANCE OPTIMIZATION =====
+    /**
+     * Optimisation des performances avec debounce
+     */
+    const debounce = (func, wait = 10) => {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
+    // ===== EASTER EGG =====
+    /**
+     * Konami code easter egg
+     */
+    const initEasterEgg = () => {
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                
+                if (konamiIndex === konamiCode.length) {
+                    console.log('🔐 CrypteMoi Secret Mode Activated! 🎉');
+                    document.body.style.filter = 'hue-rotate(180deg)';
+                    
+                    setTimeout(() => {
+                        document.body.style.filter = '';
+                        konamiIndex = 0;
+                    }, 5000);
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+    };
+
+    // ===== LOADING ANIMATION =====
+    /**
+     * Animation de chargement initial
      */
     const initLoadingAnimation = () => {
+        document.body.classList.add('loaded');
+        
+        // Fade in progressif du contenu
         setTimeout(() => {
-            if (sections && sections.length > 0) {
-                sections[0].classList.add('visible');
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.opacity = '1';
+                hero.style.transform = 'translateY(0)';
             }
-        }, 300);
+        }, 100);
+    };
+
+    // ===== ACCESSIBILITÉ =====
+    /**
+     * Amélioration de l'accessibilité
+     */
+    const initAccessibility = () => {
+        // Détection de la préférence pour les animations réduites
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        if (prefersReducedMotion.matches) {
+            document.body.classList.add('reduced-motion');
+        }
+
+        // Focus visible pour la navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-nav');
+        });
     };
 
     // ===== INITIALISATION PRINCIPALE =====
     /**
-     * Point d'entrée principal - Lance tous les systèmes
+     * Point d'entrée - Lance tous les systèmes
      */
     const init = () => {
         // Initialisation des références DOM
         initDOMReferences();
 
-        // Création des particules
-        createParticles();
+        // Détection mobile
+        initMobileDetection();
 
-        // Initialisation du curseur
-        initCursor();
-        initCursorMovement();
-        initCursorInteractions();
-
-        // Effets sur les cartes
-        initCardEffects();
-
-        // Système de navigation
-        initSectionObserver();
-        initLeverNavigation();
+        // Animations et interactions
+        initScrollReveal();
+        initNavbarScroll();
         initSmoothScroll();
+        initParallax();
+        initProblemCardsAnimation();
+        initStoreButtons();
+        initSectionTracking();
+        
+        // Accessibilité
+        initAccessibility();
+
+        // Easter egg
+        initEasterEgg();
 
         // Animation de chargement
         initLoadingAnimation();
 
-        console.log('🔐 CrypteMoi Interface System - Initialisé avec succès');
+        // Log de confirmation
+        console.log('%c🔐 CrypteMoi', 'font-size: 20px; font-weight: bold;');
+        console.log('%cInterface System v2.0 - Initialisé avec succès', 'color: #86868b;');
+        console.log('%cVotre vie privée, notre priorité.', 'font-style: italic; color: #1d1d1f;');
     };
 
-    // Lancement au chargement du DOM
+    // ===== LANCEMENT =====
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
+    }
+
+    // Export pour debug (développement uniquement)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        window.CrypteMoi = {
+            version: '2.0.0',
+            config: CONFIG,
+            debug: true
+        };
     }
 
 })();
