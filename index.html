@@ -3,65 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrypteMoi | La Liberté par le Peer-to-Peer</title>
+    <title>CrypteMoi | La Liberté de Discuter</title>
     
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <style>
-        /* ===== SYSTEME DE DESIGN AVANCÉ ===== 
-           Inspiré par les interfaces high-tech et minimalistes.
-        */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
-
+        /* ===== DESIGN SYSTEM ===== */
         :root {
             --bg: #000000;
-            --surface: #0a0a0a;
+            --surface: #0f0f0f;
             --accent: #ffffff;
-            --p2p-green: #00ff88;
-            --text: #f5f5f7;
-            --text-mute: #86868b;
-            --border: rgba(255, 255, 255, 0.1);
-            --nav-blur: rgba(0, 0, 0, 0.8);
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --p2p-glow: #00ff88;
+            --text-main: #ffffff;
+            --text-mute: #a1a1a6;
+            --apple-ease: cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Inter', -apple-system, sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            color: var(--text-main);
             overflow-x: hidden;
+            line-height: 1.5;
         }
 
-        /* ===== NAVIGATION ===== 
-        */
+        /* ===== NAVIGATION ===== */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            height: 60px;
+            height: 64px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 2000;
-            background: var(--nav-blur);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
         }
 
-        .nav-inner {
+        .nav-container {
             width: 100%;
             max-width: 1200px;
-            padding: 0 30px;
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -69,416 +62,329 @@
 
         .logo {
             font-weight: 900;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             letter-spacing: -1.5px;
-            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-links {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 30px;
         }
 
-        .logo-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--p2p-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--p2p-green);
-        }
-
-        .menu {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .menu a {
-            color: var(--text-mute);
+        .nav-links a {
             text-decoration: none;
+            color: var(--text-mute);
             font-size: 13px;
             font-weight: 500;
             transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--text-main); }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: 160px 20px 80px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 10vw, 100px);
+            font-weight: 800;
+            letter-spacing: -4px;
+            line-height: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .hero p {
+            max-width: 750px;
+            font-size: clamp(18px, 3vw, 24px);
+            color: var(--text-mute);
+            margin-bottom: 60px;
+        }
+
+        /* ===== SMARTPHONE SIMULATOR ===== */
+        .phone-mockup {
+            width: 320px;
+            height: 650px;
+            background: #000;
+            border: 12px solid #1c1c1e;
+            border-radius: 50px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,255,136,0.1);
+            overflow: hidden;
+            margin-bottom: 100px;
+        }
+
+        .phone-screen {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #000;
+        }
+
+        .phone-header {
+            padding: 40px 20px 15px;
+            border-bottom: 1px solid #1c1c1e;
+            text-align: center;
+        }
+
+        .group-name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .p2p-status {
+            font-size: 9px;
+            color: var(--p2p-glow);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .menu a:hover { color: var(--text); }
-
-        .btn-status {
-            background: var(--text);
-            color: var(--bg);
-            padding: 8px 18px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        /* ===== HERO SECTION ===== 
-        */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding-top: 100px;
-            overflow: hidden;
-        }
-
-        .hero-title {
-            font-size: clamp(50px, 12vw, 120px);
-            font-weight: 900;
-            line-height: 0.9;
-            letter-spacing: -5px;
-            text-align: center;
-            margin-bottom: 20px;
-            z-index: 10;
-        }
-
-        .hero-desc {
-            font-size: clamp(18px, 3vw, 24px);
-            color: var(--text-mute);
-            max-width: 700px;
-            text-align: center;
-            margin-bottom: 50px;
-            z-index: 10;
-        }
-
-        /* ===== SMARTPHONE & P2P ANIMATION ===== 
-        */
-        .device-wrapper {
-            position: relative;
-            width: 320px;
-            height: 660px;
-            perspective: 1000px;
-            z-index: 20;
-        }
-
-        .phone-frame {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            border: 12px solid #1c1c1e;
-            border-radius: 45px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
-            overflow: hidden;
-            transform-style: preserve-3d;
-        }
-
-        .screen-content {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background: #000;
+        .chat-container {
+            flex: 1;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        /* Simulation Chat */
-        .chat-bubble {
+        .bubble {
+            max-width: 85%;
             padding: 12px 16px;
             border-radius: 20px;
             font-size: 13px;
-            margin-bottom: 12px;
-            max-width: 90%;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(10px);
         }
 
-        .bubble-received { background: #1c1c1e; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .bubble-sent { background: var(--text); color: #000; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .received { background: #1c1c1e; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .sent { background: var(--text-main); color: #000; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-        .nickname { font-size: 10px; font-weight: 800; color: var(--p2p-green); display: block; margin-bottom: 4px; }
-
-        /* P2P Nodes Visual */
-        .p2p-visual {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
-            z-index: 1;
+        .phone-footer {
+            padding: 20px;
+            border-top: 1px solid #1c1c1e;
         }
 
-        .node {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--p2p-green);
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--p2p-green);
+        .fake-input {
+            background: #1c1c1e;
+            height: 35px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #555;
+            font-size: 12px;
         }
 
-        /* ===== BENTO FEATURES ===== 
-        */
-        .bento-section {
-            padding: 150px 30px;
-            max-width: 1200px;
+        /* ===== BENTO GRID (FUNCTIONALITIES) ===== */
+        .grid-section {
+            max-width: 1100px;
             margin: 0 auto;
+            padding: 100px 20px;
         }
 
-        .bento-grid {
+        .bento {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 25px;
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
         }
 
-        .bento-box {
+        .card {
             background: var(--surface);
-            border-radius: 35px;
+            border-radius: 30px;
             padding: 40px;
-            border: 1px solid var(--border);
-            transition: 0.5s var(--ease);
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s;
         }
 
-        .bento-box:hover {
-            border-color: var(--p2p-green);
-            transform: translateY(-10px);
-        }
-
-        .bento-box h3 { font-size: 26px; margin-bottom: 15px; }
-        .bento-box p { color: var(--text-mute); font-size: 16px; }
-
-        .span-8 { grid-column: span 8; }
-        .span-4 { grid-column: span 4; }
+        .card:hover { transform: scale(1.02); }
         .span-12 { grid-column: span 12; }
+        .span-6 { grid-column: span 6; }
+        .span-4 { grid-column: span 4; }
 
-        /* ===== SECTION MANIFESTE ===== 
-        */
+        .card h3 { font-size: 24px; margin-bottom: 15px; }
+        .card p { color: var(--text-mute); font-size: 16px; }
+
+        /* ===== MANIFESTO SECTION ===== */
         .manifesto {
             background: #fff;
             color: #000;
-            padding: 150px 30px;
+            padding: 120px 40px;
             text-align: center;
         }
 
-        .manifesto-inner { max-width: 1000px; margin: 0 auto; }
-        .manifesto-title { font-size: clamp(35px, 6vw, 80px); font-weight: 900; letter-spacing: -3px; line-height: 1; margin-bottom: 50px; }
-        .manifesto-body { font-size: 24px; text-align: left; line-height: 1.5; font-weight: 300; }
+        .manifesto-content { max-width: 900px; margin: 0 auto; }
+        .manifesto h2 { font-size: clamp(30px, 5vw, 60px); font-weight: 800; margin-bottom: 40px; letter-spacing: -2px; }
+        .manifesto p { font-size: 22px; line-height: 1.6; color: #333; text-align: left; }
 
-        /* ===== FOOTER ===== 
-        */
+        /* ===== DOWNLOAD BUTTONS ===== */
+        .cta-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .download-btn {
+            background: #222;
+            color: #fff;
+            padding: 18px 35px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border: 1px solid #444;
+            transition: 0.3s;
+        }
+
+        .download-btn:hover { background: #333; }
+
+        /* ===== FOOTER ===== */
         footer {
-            padding: 100px 30px 50px;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
+            padding: 80px 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: var(--text-mute);
+            font-size: 13px;
         }
 
-        .footer-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 100px;
-        }
-
-        .footer-col h4 { margin-bottom: 25px; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
-        .footer-col ul { list-style: none; }
-        .footer-col li { margin-bottom: 12px; }
-        .footer-col a { color: var(--text-mute); text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .footer-col a:hover { color: var(--p2p-green); }
-
-        /* ===== RESPONSIVE ===== 
-        */
-        @media (max-width: 900px) {
-            .menu { display: none; }
-            .span-8, .span-4 { grid-column: span 12; }
-            .footer-grid { grid-template-columns: 1fr; gap: 50px; }
-        }
+        /* ===== UTILS ===== */
+        .no-click { cursor: not-allowed; opacity: 0.6; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="nav-inner">
-            <div class="logo">
-                <div class="logo-dot"></div>
-                CrypteMoi
+        <div class="nav-container">
+            <div class="logo">CrypteMoi</div>
+            <div class="nav-links">
+                <a href="javascript:void(0)" onclick="alertSoon()">Technologie</a>
+                <a href="javascript:void(0)" onclick="alertSoon()">Sécurité</a>
+                <a href="javascript:void(0)" onclick="alertSoon()">A propos</a>
             </div>
-            <ul class="menu">
-                <li><a href="#tech">La Technologie</a></li>
-                <li><a href="#liberte">Liberté Civile</a></li>
-                <li><a href="#features">App Features</a></li>
-            </ul>
-            <a href="#" class="btn-status">Bientôt Disponible</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="p2p-visual" id="p2pNodes"></div>
+        <h1>Libre de parler.<br>Enfin.</h1>
+        <p>CrypteMoi n'est pas qu'une application, c'est votre espace privé. Pour tout le monde, pour chaque discussion, sans la pression d'être observé ou analysé.</p>
         
-        <h1 class="hero-title">PARLEZ SANS<br>INTERMÉDIAIRE.</h1>
-        <p class="hero-desc">La première application de messagerie mondiale fonctionnant en <b>Peer-to-Peer pur</b>. Aucun serveur ne touche vos données. La liberté d'expression, pour tous.</p>
+        <div class="phone-mockup">
+            <div class="phone-screen">
+                <div class="phone-header">
+                    <div class="group-name">Groupe Privé</div>
+                    <div class="p2p-status">● Connexion Peer-to-Peer</div>
+                </div>
+                
+                <div class="chat-container" id="chat">
+                    <div class="bubble received" id="m1">C'est une application sécurisée ? Où vont nos données au juste ?</div>
+                    <div class="bubble sent" id="m2">Nulle part. Personne ne les possède, même pas les créateurs de l'app.</div>
+                    <div class="bubble received" id="m3">C'veut dire que je peux parler sans stress de surveillance ?</div>
+                    <div class="bubble sent" id="m4">Exactement. Discute librement, comme un humain a le droit de le faire.</div>
+                </div>
 
-        <div class="device-wrapper" id="phoneContainer">
-            <div class="phone-frame">
-                <div class="screen-content">
-                    <div style="height: 20px; display: flex; justify-content: space-between; font-size: 10px; opacity: 0.5;">
-                        <span>P2P Active</span>
-                        <span>100% Secure</span>
-                    </div>
-                    
-                    <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 40px;">
-                        <div class="chat-bubble bubble-received" id="msg1">
-                            <span class="nickname">Anonyme_74</span>
-                            C'est quoi la différence avec les autres apps ?
-                        </div>
-                        
-                        <div class="chat-bubble bubble-sent" id="msg2">
-                            Ici, pas de serveur. Mon message va de mon téléphone au tien. Personne ne peut l'intercepter au milieu.
-                        </div>
-
-                        <div class="chat-bubble bubble-received" id="msg3">
-                            <span class="nickname">Anonyme_74</span>
-                            Et si je veux témoigner sur quelque chose de grave ?
-                        </div>
-
-                        <div class="chat-bubble bubble-sent" id="msg4">
-                            C'est fait pour ça. C'est ton droit de témoigner et de te cacher si besoin. La liberté de parole est totale.
-                        </div>
-                    </div>
-
-                    <div style="height: 50px; background: #1c1c1e; border-radius: 15px; display: flex; align-items: center; padding: 0 15px; color: #555; font-size: 12px; margin-top: auto;">
-                        Message sécurisé par P2P...
-                    </div>
+                <div class="phone-footer">
+                    <div class="fake-input">Votre message...</div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="manifesto" id="liberte">
-        <div class="manifesto-inner">
-            <span style="text-transform: uppercase; letter-spacing: 5px; font-weight: 800; font-size: 14px;">Le Manifeste</span>
-            <h2 class="manifesto-title">Votre parole ne appartient à personne.</h2>
-            <div class="manifesto-body">
-                <p>Dans un monde où chaque mot est indexé, vendu ou surveillé, <b>CrypteMoi</b> est un acte de résistance. Nous ne faisons pas de distinction : que vous soyez un journaliste protégeant sa source ou un citoyen lambda discutant avec sa famille, vous méritez le secret absolu.</p>
-                <br>
-                <p>Nous soutenons activement les journalistes et les lanceurs d'alerte, mais CrypteMoi est avant tout l'application de <b>Monsieur Tout-le-Monde</b>. Parce que le droit de témoigner de la vérité est universel.</p>
+        <div class="cta-container">
+            <div class="download-btn" onclick="alertSoon()">
+                <i data-lucide="apple"></i> App Store
+            </div>
+            <div class="download-btn" onclick="alertSoon()">
+                <i data-lucide="play"></i> Google Play
             </div>
         </div>
     </section>
 
-    <section class="bento-section" id="features">
-        <div class="bento-grid">
-            <div class="bento-box span-8">
-                <div style="color: var(--p2p-green); font-weight: 800; margin-bottom: 10px;">PEER-TO-PEER PUR</div>
-                <h3>L'Architecture Décentralisée</h3>
-                <p>Contrairement aux messageries "sécurisées" classiques, CrypteMoi n'utilise aucun serveur de stockage. Vos données sont fragmentées et transmises directement entre pairs. Si un gouvernement demande nos serveurs, nous n'avons rien à leur donner.</p>
+    <section class="manifesto">
+        <div class="manifesto-content">
+            <h2>L'humain au centre.</h2>
+            <p>Pourquoi devrions-nous accepter qu'une entreprise stocke nos émotions et nos secrets ? CrypteMoi est conçue pour <b>tout le monde</b> : de la discussion quotidienne entre amis au partage d'informations sensibles. Vous n'avez pas besoin d'être un expert pour avoir droit au respect. Discuter tranquillement et librement n'est pas un luxe, c'est un droit.</p>
+        </div>
+    </section>
+
+    <section class="grid-section">
+        <div class="bento">
+            <div class="card span-12">
+                <h3>Architecture Zero-Trace</h3>
+                <p>Actuellement, CrypteMoi fonctionne sur un protocole décentralisé. Lorsque vous envoyez un message, il ne transite par aucun serveur central. C'est une communication de matériel à matériel (Peer-to-Peer). Résultat : aucune trace n'existe en dehors de votre téléphone et de celui de votre interlocuteur.</p>
             </div>
             
-            <div class="bento-box span-4">
-                <h3>Surnoms Locaux</h3>
-                <p>Ne mémorisez plus d'identifiants complexes. Attribuez des surnoms à vos contacts pour organiser votre cercle sans que l'identité réelle ne soit liée à un compte.</p>
+            <div class="card span-6">
+                <h3>Hardware ID Bonding</h3>
+                <p>L'application lie votre compte à la signature physique de votre appareil. Pas besoin de numéro de téléphone ou d'email. Votre anonymat est total dès l'installation.</p>
             </div>
 
-            <div class="bento-box span-4">
-                <h3>Hardware Link</h3>
-                <p>Pas de mail. Pas de numéro. Votre matériel est votre identité unique. L'anonymat est intégré dans le code, pas ajouté après.</p>
+            <div class="card span-6">
+                <h3>Cryptographie Asymétrique</h3>
+                <p>Chaque message est chiffré à la source avec les standards les plus élevés au monde. Même si quelqu'un interceptait le signal Wi-Fi, il ne verrait que du bruit illisible.</p>
             </div>
 
-            <div class="bento-box span-8">
-                <h3>Un Outil pour Témoigner</h3>
-                <p>Nous protégeons ceux qui osent parler. CrypteMoi inclut des protocoles de suppression d'urgence et de dissimulation pour assurer que votre droit à l'expression reste inviolable, peu importe votre pays.</p>
+            <div class="card span-4">
+                <h3>Surnoms Privés</h3>
+                <p>Renommez vos contacts localement. L'identité que vous donnez à vos proches reste sur votre téléphone uniquement.</p>
             </div>
 
-            <div class="bento-box span-12" style="text-align: center; border: 1px dashed var(--p2p-green);">
-                <h3>L'application sera disponible sur iOS et Android en 2026.</h3>
-                <p>Nous finalisons les audits de sécurité pour garantir un réseau P2P indestructible.</p>
+            <div class="card span-4">
+                <h3>Anti-Pression</h3>
+                <p>Pas d'indicateur de saisie, pas de "vu" obligatoire. Discutez à votre rythme, sans l'anxiété des messageries modernes.</p>
+            </div>
+
+            <div class="card span-4">
+                <h3>Suppression Totale</h3>
+                <p>Un bouton permet de purger instantanément toutes les discussions de l'appareil. Définitif et irréversible.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <div class="logo" style="margin-bottom: 20px;">
-                    <div class="logo-dot"></div>
-                    CrypteMoi
-                </div>
-                <p style="color: var(--text-mute); font-size: 14px;">La communication souveraine pour tous. Protégez votre vie privée, défendez votre liberté d'expression.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Technologie</h4>
-                <ul>
-                    <li><a href="#">Protocole P2P</a></li>
-                    <li><a href="#">Cryptographie</a></li>
-                    <li><a href="#">Open Source</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Mission</h4>
-                <ul>
-                    <li><a href="#">Liberté d'expression</a></li>
-                    <li><a href="#">Journalisme</a></li>
-                    <li><a href="#">Protection Civile</a></li>
-                </ul>
-            </div>
-        </div>
-        <div style="margin-top: 80px; text-align: center; font-size: 12px; color: var(--text-mute); opacity: 0.5;">
-            &copy; 2026 CrypteMoi. Votre vie privée n'est pas un produit.
-        </div>
+        <p>&copy; 2026 CrypteMoi. L'application qui vous rend votre liberté.</p>
     </footer>
 
     <script>
-        // Initialisation Lucide
+        // Initialisation icônes
         lucide.createIcons();
 
-        // 1. ANIMATION DES NOEUDS P2P (BACKGROUND)
-        const nodeContainer = document.getElementById('p2pNodes');
-        for (let i = 0; i < 50; i++) {
-            const node = document.createElement('div');
-            node.className = 'node';
-            node.style.top = Math.random() * 100 + '%';
-            node.style.left = Math.random() * 100 + '%';
-            nodeContainer.appendChild(node);
-            
-            // Animation aléatoire pour chaque noeud
-            gsap.to(node, {
-                x: (Math.random() - 0.5) * 200,
-                y: (Math.random() - 0.5) * 200,
-                duration: 5 + Math.random() * 5,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
+        // Alerte "Bientôt disponible"
+        function alertSoon() {
+            alert("CrypteMoi est en phase finale d'audit de sécurité. L'application sera disponible sur les stores très prochainement !");
+        }
+
+        // Animation du chat
+        const messages = [
+            { id: "m1", delay: 1000 },
+            { id: "m2", delay: 2500 },
+            { id: "m3", delay: 4000 },
+            { id: "m4", delay: 5500 }
+        ];
+
+        function runChat() {
+            messages.forEach(msg => {
+                setTimeout(() => {
+                    gsap.to(`#${msg.id}`, { opacity: 1, y: 0, duration: 0.6 });
+                }, msg.delay);
             });
         }
 
-        // 2. ANIMATION DU TELEPHONE AU SCROLL
-        gsap.registerPlugin(ScrollTrigger);
+        // Lancer au chargement
+        window.onload = runChat;
 
-        gsap.to("#phoneContainer", {
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            },
-            rotateX: 20,
-            scale: 0.8,
-            y: 100,
-            opacity: 0.5
-        });
-
-        // 3. SEQUENCE DE CHAT
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
-        tl.to("#msg1", { opacity: 1, y: 0, duration: 0.5 })
-          .to("#msg2", { opacity: 1, y: 0, duration: 0.5 }, "+=1")
-          .to("#msg3", { opacity: 1, y: 0, duration: 0.5 }, "+=1.5")
-          .to("#msg4", { opacity: 1, y: 0, duration: 0.5 }, "+=1")
-          .to(".chat-bubble", { opacity: 0, duration: 0.5, delay: 3 });
-
-        // 4. MOUVEMENT SOURIS PARALLAXE
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX - window.innerWidth / 2) / 50;
-            const y = (e.clientY - window.innerHeight / 2) / 50;
-            gsap.to("#phoneContainer", {
-                rotationY: x,
-                rotationX: -y,
-                duration: 1
+        // Empêcher les liens vides de scroller en haut
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
             });
         });
     </script>
