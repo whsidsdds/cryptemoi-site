@@ -3,178 +3,793 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrypteMoi | Liberté d'expression & Souveraineté</title>
+    <title>CrypteMoi | Souveraineté Numérique & Liberté d'Expression</title>
+    
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        /* ===== DESIGN SYSTEM & RESET ===== 
+        */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
         :root {
-            --black: #000000;
-            --white: #ffffff;
-            --gray-400: #a1a1a6;
-            --gray-800: #1d1d1f;
-            --accent: #4ade80;
-            --ease: cubic-bezier(0.65, 0, 0.35, 1);
+            --bg-color: #000000;
+            --surface-color: #0a0a0a;
+            --card-color: #121212;
+            --accent-color: #ffffff;
+            --secondary-accent: #4ade80; /* Vert pour le chiffrement */
+            --danger-color: #ff453a;
+            --text-main: #ffffff;
+            --text-dim: #86868b;
+            --text-darker: #424245;
+            --nav-height: 52px;
+            --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --border-radius-large: 32px;
+            --border-radius-medium: 18px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--black); color: var(--white); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-
-        /* NAVIGATION RÉDUITE */
-        nav {
-            position: fixed; top: 0; width: 100%; height: 72px; display: flex; align-items: center; justify-content: center; z-index: 1000;
-            transition: all 0.4s var(--ease);
-        }
-        nav.scrolled { background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .nav-container { width: 100%; max-width: 1200px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-menu { display: flex; gap: 32px; list-style: none; }
-        .nav-menu a { text-decoration: none; color: var(--gray-400); font-size: 14px; font-weight: 500; transition: 0.3s; }
-        .nav-menu a:hover { color: var(--white); }
-        .nav-cta { background: var(--white); color: var(--black); padding: 10px 24px; border-radius: 100px; font-size: 14px; font-weight: 600; text-decoration: none; }
-
-        /* HERO SECTION */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 120px 20px 0; background: radial-gradient(circle at center, #111 0%, #000 100%); }
-        .hero-badge { background: rgba(74, 222, 128, 0.1); color: var(--accent); padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 600; margin-bottom: 24px; border: 1px solid var(--accent); opacity: 0; animation: fadeInMove 0.8s var(--ease) forwards; }
-        .hero h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 800; letter-spacing: -3px; margin-bottom: 24px; opacity: 0; animation: fadeInMove 1s var(--ease) 0.2s forwards; }
-        .hero p { color: var(--gray-400); max-width: 700px; margin-bottom: 40px; opacity: 0; animation: fadeInMove 1s var(--ease) 0.4s forwards; }
-
-        @keyframes fadeInMove { to { opacity: 1; transform: translateY(0); } }
-
-        /* SMARTPHONE ANIMÉ */
-        .device-container { perspective: 1500px; z-index: 5; margin-bottom: 50px; }
-        .iphone-mockup {
-            width: 290px; height: 580px; background: #0a0a0a; border: 12px solid #1c1c1c; border-radius: 44px;
-            position: relative; box-shadow: 0 50px 100px rgba(0,0,0,0.8); overflow: hidden;
-            animation: floatPhone 4s ease-in-out infinite; transform-style: preserve-3d;
-        }
-        @keyframes floatPhone {
-            0%, 100% { transform: translateY(0) rotateY(-5deg) rotateX(5deg); }
-            50% { transform: translateY(-25px) rotateY(10deg) rotateX(-2deg); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .iphone-screen { height: 100%; padding: 20px; display: flex; flex-direction: column; background: #000; }
-        .chat-msg { opacity: 0; transform: translateY(10px); animation: msgIn 0.5s ease forwards; margin-bottom: 12px; }
-        @keyframes msgIn { to { opacity: 1; transform: translateY(0); } }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            background-color: var(--bg-color);
+        }
 
-        .bubble { background: #1c1c1e; padding: 10px 14px; border-radius: 15px; font-size: 12px; max-width: 85%; line-height: 1.4; }
-        .bubble.me { background: var(--white); color: #000; align-self: flex-end; margin-left: auto; }
-        .surnom { font-size: 9px; font-weight: 700; color: var(--accent); display: block; margin-bottom: 2px; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+        }
 
-        /* BENTO GRID - FONCTIONNALITÉS */
-        .section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
-        .section h2 { font-size: clamp(32px, 5vw, 56px); margin-bottom: 50px; letter-spacing: -2px; }
-        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
-        .bento-item { background: var(--gray-800); border-radius: 24px; padding: 35px; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; }
-        .bento-item:hover { transform: translateY(-10px); border-color: var(--accent); }
-        .large { grid-column: span 8; }
-        .small { grid-column: span 4; }
-        .full { grid-column: span 12; }
-        .bento-item h3 { margin-bottom: 15px; font-size: 22px; color: var(--accent); }
-        .bento-item p { color: var(--gray-400); line-height: 1.6; }
+        /* ===== TYPOGRAPHY ===== 
+        */
+        h1, h2, h3, h4 {
+            letter-spacing: -0.015em;
+            font-weight: 600;
+        }
 
-        .soon-badge { background: var(--accent); color: #000; padding: 4px 12px; border-radius: 50px; font-size: 10px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
+        .hero-title {
+            font-size: clamp(48px, 10vw, 96px);
+            line-height: 1.05;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
 
+        .section-title {
+            font-size: clamp(32px, 5vw, 56px);
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        /* ===== NAVIGATION ===== 
+        */
+        .global-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s var(--ease-apple);
+        }
+
+        .nav-content {
+            max-width: 1024px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 21px;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .nav-cta {
+            background: var(--text-main);
+            color: var(--bg-color);
+            padding: 4px 12px;
+            border-radius: 980px;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-cta:hover {
+            opacity: 0.8;
+        }
+
+        /* ===== HERO SECTION ===== 
+        */
+        .hero {
+            position: relative;
+            min-height: 110vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 150px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            color: var(--secondary-accent);
+            margin-bottom: 32px;
+            display: inline-block;
+            animation: fadeInUp 0.8s var(--ease-out-expo);
+        }
+
+        .hero-sub {
+            font-size: clamp(19px, 3vw, 28px);
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 24px auto 48px;
+            animation: fadeInUp 1s var(--ease-out-expo) 0.1s both;
+        }
+
+        /* ===== DEVICE MOCKUP (ADVANCED) ===== 
+        */
+        .phone-scroller {
+            position: relative;
+            width: 100%;
+            height: 800px;
+            display: flex;
+            justify-content: center;
+            perspective: 2000px;
+            margin-top: -50px;
+        }
+
+        .iphone-frame {
+            position: relative;
+            width: 320px;
+            height: 650px;
+            background: #000;
+            border-radius: 54px;
+            border: 12px solid #1c1c1e;
+            box-shadow: 
+                0 50px 100px -20px rgba(0,0,0,0.5),
+                0 0 0 2px #333,
+                inset 0 0 15px rgba(255,255,255,0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.1s var(--ease-apple);
+            overflow: hidden;
+            animation: phoneEntrance 1.5s var(--ease-out-expo);
+        }
+
+        .iphone-screen {
+            height: 100%;
+            width: 100%;
+            background: #000;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 28px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        /* App UI */
+        .app-nav {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            border-bottom: 1px solid #1c1c1e;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .msg.received {
+            background: #1c1c1e;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg.sent {
+            background: var(--text-main);
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .nickname-tag {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--secondary-accent);
+        }
+
+        .app-input-bar {
+            height: 60px;
+            border-top: 1px solid #1c1c1e;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            gap: 10px;
+        }
+
+        .input-pill {
+            flex: 1;
+            background: #1c1c1e;
+            height: 36px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            color: #555;
+            font-size: 12px;
+        }
+
+        /* ===== BENTO GRID SECTION ===== 
+        */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 22px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 240px;
+            gap: 24px;
+        }
+
+        .bento-card {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-large);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s var(--ease-apple);
+        }
+
+        .bento-card:hover {
+            background: #111111;
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .bento-card.span-12 { grid-column: span 12; }
+        .bento-card.span-8 { grid-column: span 8; }
+        .bento-card.span-4 { grid-column: span 4; }
+        .bento-card.span-6 { grid-column: span 6; }
+
+        .bento-card h3 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .bento-card p {
+            color: var(--text-dim);
+            font-size: 17px;
+            line-height: 1.5;
+            max-width: 500px;
+        }
+
+        .bento-icon-bg {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 120px;
+            color: rgba(255,255,255,0.03);
+            transform: rotate(-10deg);
+        }
+
+        /* ===== FREEDOM OF EXPRESSION SECTION ===== 
+        */
+        .manifesto-section {
+            background: #ffffff;
+            color: #000000;
+            padding: 140px 22px;
+            text-align: center;
+        }
+
+        .manifesto-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .manifesto-label {
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .manifesto-title {
+            font-size: clamp(32px, 6vw, 72px);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 40px;
+        }
+
+        .manifesto-text {
+            font-size: clamp(18px, 2.5vw, 24px);
+            line-height: 1.6;
+            color: #1d1d1f;
+            text-align: left;
+        }
+
+        .journalist-support {
+            margin-top: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .support-card {
+            background: #f5f5f7;
+            padding: 30px;
+            border-radius: 24px;
+            flex: 1;
+            min-width: 280px;
+            text-align: left;
+        }
+
+        /* ===== FEATURES LIST SECTION ===== 
+        */
+        .features-detailed {
+            padding: 100px 22px;
+            background: var(--bg-color);
+        }
+
+        .feature-row {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+            margin-bottom: 150px;
+        }
+
+        .feature-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-info {
+            flex: 1;
+        }
+
+        .feature-visual {
+            flex: 1;
+            background: var(--surface-color);
+            height: 400px;
+            border-radius: var(--border-radius-large);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .soon-tag {
+            background: var(--secondary-accent);
+            color: #000;
+            padding: 4px 10px;
+            font-weight: 800;
+            font-size: 10px;
+            border-radius: 4px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* ===== FOOTER ===== 
+        */
+        footer {
+            background: var(--surface-color);
+            padding: 80px 22px 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            max-width: 1024px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 12px;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--text-main);
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            max-width: 1024px;
+            margin: 60px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-darker);
+            font-size: 11px;
+        }
+
+        /* ===== ANIMATIONS ===== 
+        */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes phoneEntrance {
+            from { opacity: 0; transform: scale(0.8) rotateX(20deg); }
+            to { opacity: 1; transform: scale(1) rotateX(0deg); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s var(--ease-apple);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== MOBILE ADAPTATION ===== 
+        */
         @media (max-width: 768px) {
-            .nav-menu { display: none; }
-            .large, .small { grid-column: span 12; }
+            .nav-links { display: none; }
+            .feature-row { flex-direction: column !important; gap: 40px; }
+            .bento-card { grid-column: span 12 !important; }
+            .hero-title { font-size: 48px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <nav id="mainNav">
-        <div class="nav-container">
-            <div style="font-weight: 900; font-size: 1.4rem;">CrypteMoi</div>
-            <ul class="nav-menu">
-                <li><a href="#liberte">Notre Engagement</a></li>
+    <nav class="global-nav" id="navbar">
+        <div class="nav-content">
+            <a href="#" class="nav-logo">CrypteMoi</a>
+            <ul class="nav-links">
+                <li><a href="#vision">Manifeste</a></li>
                 <li><a href="#features">Fonctionnalités</a></li>
+                <li><a href="#security">Cryptographie</a></li>
             </ul>
             <a href="#download" class="nav-cta">Bientôt disponible</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="hero-badge">Soutien total aux journalistes & lanceurs d'alerte</div>
-        <h1>Le droit de témoigner,<br>le pouvoir de se cacher.</h1>
-        <p>Nous croyons en une liberté d'expression absolue. CrypteMoi est l'outil conçu pour ceux qui risquent tout pour l'information. Aucun serveur, aucune trace, aucun compromis.</p>
+        <div class="hero-badge">Protéger la vérité, protéger ceux qui la disent</div>
+        <h1 class="hero-title">L'anonymat est un<br>droit humain.</h1>
+        <p class="hero-sub">L'application de communication souveraine qui redonne le pouvoir aux citoyens et aux journalistes. Pas de serveurs, pas de traces, juste la liberté.</p>
         
-        <div class="device-container">
-            <div class="iphone-mockup" id="heroPhone">
+        <div class="phone-scroller">
+            <div class="iphone-frame" id="mainPhone">
                 <div class="iphone-screen">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <div style="font-size: 10px; color: var(--accent);">• Canal Sécurisé</div>
-                        <div style="font-weight: 800;">"Source Confidentielle"</div>
-                    </div>
-                    
-                    <div class="chat-msg" style="animation-delay: 1s;">
-                        <span class="surnom">L'Infiltre (Surnom)</span>
-                        <div class="bubble">J'ai les documents sur l'affaire X. Comment vous les envoyer ?</div>
-                    </div>
-
-                    <div class="chat-msg" style="animation-delay: 2.5s;">
-                        <div class="bubble me">Utilise le groupe "Dossier 42", les métadonnées sont supprimées automatiquement.</div>
+                    <div class="dynamic-island"></div>
+                    <div class="app-nav">
+                        <i data-lucide="chevron-left" style="width: 20px;"></i>
+                        <div style="text-align: center;">
+                            <div style="font-weight: 800; font-size: 14px;">Sources de l'ombre</div>
+                            <div style="font-size: 8px; color: var(--secondary-accent);">Canal chiffré P2P</div>
+                        </div>
+                        <i data-lucide="more-horizontal" style="width: 20px;"></i>
                     </div>
 
-                    <div class="chat-msg" style="animation-delay: 4s;">
-                        <span class="surnom">L'Infiltre (Surnom)</span>
-                        <div class="bubble">C'est fait. Merci de me permettre de témoigner en sécurité.</div>
+                    <div class="chat-area" id="chatDemo">
+                        <div class="msg received" style="transition-delay: 0.5s;">
+                            <span class="nickname-tag">Redacteur_Anonyme</span>
+                            J'ai les preuves de la corruption sur le projet Horizon. Comment procéder ?
+                        </div>
+                        <div class="msg sent" style="transition-delay: 2s;">
+                            On passe par le groupe "Evidence-X". Utilise ton surnom de sécurité. Ici rien n'est stocké.
+                        </div>
+                        <div class="msg received" style="transition-delay: 3.5s;">
+                            <span class="nickname-tag">Redacteur_Anonyme</span>
+                            C'est envoyé. Merci d'exister pour nous protéger.
+                        </div>
                     </div>
 
-                    <div style="margin-top: auto; border: 1px solid #333; border-radius: 20px; padding: 10px; font-size: 10px; color: #555;">
-                        Écrire anonymement...
+                    <div class="app-input-bar">
+                        <i data-lucide="plus" style="width: 20px; color: #555;"></i>
+                        <div class="input-pill">Message...</div>
+                        <i data-lucide="mic" style="width: 20px; color: #555;"></i>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section" id="features">
-        <div class="soon-badge">APP DISPONIBLE PROCHAINEMENT</div>
-        <h2>Liberté technique & humaine.</h2>
-        
-        <div class="bento-grid">
-            <div class="bento-item large">
-                <h3>Gestion des Surnoms</h3>
-                <p>Ne mémorisez plus des identifiants complexes. Attribuez des surnoms personnalisés à vos contacts pour savoir instantanément avec qui vous échangez, sans que leur identité réelle ne soit jamais stockée sur un serveur.</p>
+    <section class="manifesto-section" id="vision">
+        <div class="manifesto-content reveal">
+            <span class="manifesto-label">Notre Engagement</span>
+            <h2 class="manifesto-title">Parce que la vérité ne devrait jamais mener en prison.</h2>
+            <div class="manifesto-text">
+                <p>Nous vivons dans une ère de surveillance totale. Pour un journaliste, une source ou un simple citoyen, témoigner est devenu un acte de bravoure dangereux. </p>
+                <br>
+                <p><strong>CrypteMoi est né de ce constat.</strong> Nous soutenons inconditionnellement les journalistes qui veulent se cacher pour mieux enquêter. Nous affirmons que chaque individu a le droit de témoigner de ce qu'il voit sans craindre de représailles numériques.</p>
             </div>
-            <div class="bento-item small">
-                <h3>Groupes Éphémères</h3>
-                <p>Créez des espaces de discussion collectifs auto-destructibles. Idéal pour coordonner des actions ou des reportages en équipe.</p>
-            </div>
-            <div class="bento-item full" id="liberte">
-                <h3>Liberté d'expression & Protection</h3>
-                <p>Nous soutenons activement les journalistes et les citoyens dans les zones de censure. Notre technologie permet de témoigner anonymement, protégeant le droit fondamental à l'information. Si vous devez vous cacher pour dire la vérité, CrypteMoi est votre bouclier.</p>
-            </div>
-            <div class="bento-item small">
-                <h3>Zéro Cloud</h3>
-                <p>Vos messages n'existent que sur votre téléphone. Aucune entreprise, aucun gouvernement ne peut intercepter ce qui n'est pas stocké.</p>
-            </div>
-            <div class="bento-item large">
-                <h3>Souveraineté Matérielle</h3>
-                <p>Votre téléphone est votre clé. Pas de numéro de mobile requis, pas d'e-mail. Votre anonymat commence dès l'ouverture de l'application.</p>
+
+            <div class="journalist-support">
+                <div class="support-card reveal">
+                    <i data-lucide="shield-alert" style="color: var(--danger-color); margin-bottom: 20px;"></i>
+                    <h4>Protection des sources</h4>
+                    <p style="font-size: 14px; margin-top: 10px;">Suppression automatique des métadonnées et routage décentralisé pour les lanceurs d'alerte.</p>
+                </div>
+                <div class="support-card reveal">
+                    <i data-lucide="eye-off" style="color: #000; margin-bottom: 20px;"></i>
+                    <h4>Droit au secret</h4>
+                    <p style="font-size: 14px; margin-top: 10px;">Le secret professionnel des journalistes est techniquement garanti par l'absence totale de serveurs centraux.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <footer style="padding: 60px 40px; text-align: center; border-top: 1px solid #222;">
-        <p style="font-weight: 800; font-size: 1.2rem; margin-bottom: 10px;">CrypteMoi</p>
-        <p style="color: var(--gray-400); font-size: 12px;">&copy; 2026 - Soutenir la vérité, protéger l'anonymat.</p>
+    <section class="section-container" id="features">
+        <div style="margin-bottom: 60px;" class="reveal">
+            <h2 class="section-title">Plus qu'une messagerie.<br>Un arsenal de protection.</h2>
+        </div>
+
+        <div class="bento-grid">
+            <div class="bento-card span-8 reveal">
+                <div class="soon-tag">UNIQUE</div>
+                <h3>Surnoms de Mémoire</h3>
+                <p>Ne stockez jamais de noms réels. Attribuez des surnoms locaux à vos contacts pour vous souvenir de leur rôle sans compromettre leur identité. Le surnom ne quitte jamais votre appareil.</p>
+                <div class="bento-icon-bg"><i class="fa-solid fa-user-secret"></i></div>
+            </div>
+            
+            <div class="bento-card span-4 reveal">
+                <h3>Zéro Serveur</h3>
+                <p>Vos messages passent directement de matériel à matériel. Aucune base de données centrale à pirater.</p>
+                <div class="bento-icon-bg"><i class="fa-solid fa-server"></i></div>
+            </div>
+
+            <div class="bento-card span-4 reveal">
+                <h3>Groupes Invisibles</h3>
+                <p>Créez des groupes de travail sécurisés. L'existence même du groupe est chiffrée. Seuls les invités savent qu'il existe.</p>
+                <div class="bento-icon-bg"><i class="fa-solid fa-users"></i></div>
+            </div>
+
+            <div class="bento-card span-8 reveal">
+                <h3>Hardware ID Bonding</h3>
+                <p>Votre compte est lié physiquement à votre matériel. Pas de SIM, pas d'email. Votre identité est votre processeur. Impossible de cloner votre accès.</p>
+                <div class="bento-icon-bg"><i class="fa-solid fa-microchip"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-detailed">
+        <div class="section-container">
+            <div class="feature-row reveal">
+                <div class="feature-info">
+                    <h2 class="section-title">Gestion de groupes avancée <span class="soon-tag">V2</span></h2>
+                    <p class="hero-sub" style="font-size: 18px; text-align: left;">Collaborez en toute discrétion. Nos groupes supportent le partage de documents lourds avec un chiffrement de bout en bout asymétrique. Idéal pour les rédactions décentralisées.</p>
+                    <ul style="list-style: none; margin-top: 20px; color: var(--text-dim);">
+                        <li><i data-lucide="check" style="width:16px; color:var(--secondary-accent);"></i> Suppression automatique des messages</li>
+                        <li><i data-lucide="check" style="width:16px; color:var(--secondary-accent);"></i> Vote anonyme intégré</li>
+                        <li><i data-lucide="check" style="width:16px; color:var(--secondary-accent);"></i> Transfert de fichiers sans limites</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <i data-lucide="users" style="width: 100px; height: 100px; opacity: 0.2;"></i>
+                </div>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-info">
+                    <h2 class="section-title">L'App sera bientôt disponible</h2>
+                    <p class="hero-sub" style="font-size: 18px; text-align: left;">Nous finalisons les audits de sécurité indépendants. CrypteMoi sera déployé sur iOS et Android au premier trimestre 2026. Inscrivez-vous pour un accès anticipé réservé aux professionnels de l'information.</p>
+                    <a href="#" class="nav-cta" style="padding: 15px 30px; font-size: 16px;">Rejoindre la liste d'attente</a>
+                </div>
+                <div class="feature-visual">
+                    <i data-lucide="calendar" style="width: 100px; height: 100px; opacity: 0.2;"></i>
+                    <div style="position: absolute; bottom: 20px; font-weight: 800; letter-spacing: 2px;">COMING SOON</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="text-align: center; padding: 150px 22px; background: radial-gradient(circle at center, #111 0%, #000 100%);">
+        <div class="reveal">
+            <h2 class="hero-title" style="font-size: 64px; margin-bottom: 40px;">Reprenez le contrôle.</h2>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <div style="padding: 20px 40px; background: #fff; color: #000; border-radius: 100px; font-weight: 700;">App Store</div>
+                <div style="padding: 20px 40px; background: #222; color: #fff; border-radius: 100px; font-weight: 700; border: 1px solid #333;">Google Play</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4 style="font-weight: 900; font-size: 18px;">CrypteMoi</h4>
+                <p style="font-size: 12px; color: var(--text-dim); margin-top: 10px;">L'intégrité par le code. La liberté par l'anonymat.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <ul>
+                    <li><a href="#">Fonctionnalités</a></li>
+                    <li><a href="#">Sécurité</a></li>
+                    <li><a href="#">Bêta Test</a></li>
+                    <li><a href="#">API</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Engagement</h4>
+                <ul>
+                    <li><a href="#">Liberté d'expression</a></li>
+                    <li><a href="#">Soutien Journalistes</a></li>
+                    <li><a href="#">Manifeste</a></li>
+                    <li><a href="#">Données</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Légal</h4>
+                <ul>
+                    <li><a href="#">Confidentialité</a></li>
+                    <li><a href="#">Conditions</a></li>
+                    <li><a href="#">Transparence</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 CrypteMoi Inc. Tous droits réservés.</div>
+            <div>Hébergé sur le réseau décentralisé.</div>
+        </div>
     </footer>
 
     <script>
+        // Initialisation Lucide
         lucide.createIcons();
 
-        // Effet au scroll pour la nav
-        window.addEventListener('scroll', () => {
-            document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 50);
+        // 1. ANIMATION DU TÉLÉPHONE (MOUVEMENT SOURIS)
+        const phone = document.getElementById('mainPhone');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+            phone.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // Animation de rotation légère au mouvement de souris (Desktop)
-        const phone = document.getElementById('heroPhone');
-        document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 25;
-            const y = (window.innerHeight / 2 - e.pageY) / 25;
-            phone.style.transform = `rotateX(${5 + y}deg) rotateY(${-5 - x}deg)`;
+        // 2. SIMULATION DE CHAT (REVEAL PROGRESSIF)
+        const messages = document.querySelectorAll('.msg');
+        const observerOptions = { threshold: 0.5 };
+        
+        const chatObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    messages.forEach((msg, index) => {
+                        setTimeout(() => {
+                            msg.style.opacity = "1";
+                            msg.style.transform = "translateY(0)";
+                        }, index * 800);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        chatObserver.observe(document.getElementById('chatDemo'));
+
+        // 3. SCROLL REVEAL GÉNÉRAL
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // 4. EFFET NAVBAR
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > 50) {
+                nav.style.height = "44px";
+                nav.style.background = "rgba(0,0,0,0.95)";
+            } else {
+                nav.style.height = "52px";
+                nav.style.background = "rgba(0,0,0,0.8)";
+            }
         });
     </script>
 </body>
