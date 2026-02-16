@@ -1,0 +1,97 @@
+/**
+ * CrypteMoi - Logiciel de gestion d'interface
+ * Gère le curseur personnalisé, le suivi du défilement et les effets de parallaxe.
+ * * Structure du projet :
+ * ├── assets/
+ * │   ├── logo.png (Image fournie)
+ * │   └── fonts/ (Space Grotesk)
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cursor = document.getElementById('custom-cursor');
+    const handle = document.getElementById('leverHandle');
+    const sections = document.querySelectorAll('section');
+    const cards = document.querySelectorAll('.float-card');
+    const glow = document.querySelector('.glow');
+
+    /**
+     * Mise à jour du curseur avec le logo CrypteMoi (C + Personne + Cadenas)
+     * Le SVG ci-dessous reproduit fidèlement l'image fournie.
+     */
+    if (cursor) {
+        cursor.innerHTML = `
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Lettre C -->
+                <path d="M75 25C68 18 59 15 50 15C30.67 15 15 30.67 15 50C15 69.33 30.67 85 50 85C59 85 68 82 75 75" stroke="white" stroke-width="8" stroke-linecap="round"/>
+                <!-- Silhouette Personne -->
+                <circle cx="50" cy="45" r="12" fill="white"/>
+                <path d="M35 70C35 60 41.7 55 50 55C58.3 55 65 60 65 70" fill="white"/>
+                <!-- Cadenas -->
+                <rect x="40" y="72" width="20" height="15" rx="2" fill="white"/>
+                <path d="M44 72V68C44 64.68 46.68 62 50 62C53.32 62 56 64.68 56 68V72" stroke="white" stroke-width="3"/>
+            </svg>
+        `;
+    }
+
+    /**
+     * Gestion du curseur personnalisé
+     */
+    document.addEventListener('mousemove', (e) => {
+        if (cursor) {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        }
+
+        /**
+         * Effets de parallaxe 3D sur les cartes
+         */
+        const xRotation = (window.innerHeight / 2 - e.clientY) / 30;
+        const yRotation = (e.clientX - window.innerWidth / 2) / 30;
+
+        cards.forEach(card => {
+            card.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+        });
+
+        // Déplacement de la lueur d'ambiance
+        if (glow) {
+            glow.style.transform = `translate(${yRotation * 2}px, ${xRotation * 2}px)`;
+        }
+    });
+
+    /**
+     * Animations au clic
+     */
+    document.addEventListener('mousedown', () => {
+        if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+
+    /**
+     * Observateur d'intersection pour les sections
+     */
+    const observerOptions = {
+        threshold: 0.5 
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+
+                const sectionIndex = Array.from(sections).indexOf(entry.target);
+                if (handle) {
+                    const totalSteps = sections.length - 1;
+                    const position = (sectionIndex / totalSteps) * 250; 
+                    handle.style.top = `${position}px`;
+                }
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+});
