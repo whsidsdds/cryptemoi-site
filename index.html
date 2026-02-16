@@ -66,18 +66,7 @@
             align-items: center;
         }
 
-        .logo-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--white);
-            font-weight: 700;
-            font-size: 20px;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-box svg {
+        .logo-placeholder {
             width: 32px;
             height: 32px;
         }
@@ -115,19 +104,25 @@
             transform: scale(1.05);
         }
 
-        /* ===== HERO ===== */
+        /* ===== HERO SECTION ===== */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Changé pour laisser de la place */
             align-items: center;
             text-align: center;
-            padding: 0 20px;
+            padding: 120px 20px 0 20px;
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
         }
 
+        .hero-content {
+            z-index: 10;
+            margin-bottom: 40px; /* Espace avant le téléphone */
+        }
+
         .hero-badge {
+            display: inline-block;
             background: rgba(255, 255, 255, 0.1);
             padding: 6px 16px;
             border-radius: 100px;
@@ -147,17 +142,17 @@
             font-weight: 800;
             line-height: 0.95;
             letter-spacing: -3px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInMove 1s var(--ease) 0.2s forwards;
         }
 
         .hero p {
-            font-size: clamp(18px, 2vw, 24px);
+            font-size: clamp(16px, 2vw, 20px);
             color: var(--gray-400);
-            max-width: 640px;
-            margin-bottom: 48px;
+            max-width: 600px;
+            margin: 0 auto 32px;
             font-weight: 400;
             opacity: 0;
             transform: translateY(30px);
@@ -172,24 +167,30 @@
         .device-container {
             position: relative;
             width: 100%;
-            height: 600px;
+            max-width: 400px;
+            height: 650px;
             display: flex;
             justify-content: center;
-            margin-top: -100px;
-            perspective: 1000px;
+            perspective: 1200px;
+            z-index: 5;
         }
 
         .iphone-mockup {
             width: 300px;
             height: 600px;
             background: #0a0a0a;
-            border: 8px solid #1c1c1c;
-            border-radius: 40px;
+            border: 10px solid #1c1c1c;
+            border-radius: 44px;
             position: relative;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.8), 0 0 200px rgba(255,255,255,0.05);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.02);
             overflow: hidden;
-            transform: rotateX(10deg);
-            transition: all 0.8s var(--ease);
+            transition: transform 0.1s ease-out; /* Plus réactif au mousemove */
+            animation: floatPhone 6s ease-in-out infinite;
+        }
+
+        @keyframes floatPhone {
+            0%, 100% { transform: translateY(0) rotateX(5deg); }
+            50% { transform: translateY(-15px) rotateX(8deg); }
         }
 
         .iphone-screen {
@@ -199,23 +200,71 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
+            position: relative;
+        }
+
+        /* Dynamic Island / Notch */
+        .iphone-screen::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 22px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 20;
         }
 
         .app-header {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .chat-msg {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: slideInChat 0.5s ease forwards;
+        }
+
+        .chat-msg:nth-child(1) { animation-delay: 1.2s; }
+        .chat-msg:nth-child(2) { animation-delay: 2.2s; }
+        .chat-msg:nth-child(3) { animation-delay: 3.2s; }
+
+        @keyframes slideInChat {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .user-label {
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .app-chat-bubble {
             background: #1c1c1e;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 18px;
-            margin-bottom: 12px;
             font-size: 13px;
-            max-width: 80%;
+            max-width: 85%;
             border-bottom-left-radius: 4px;
+            line-height: 1.4;
         }
 
         .app-chat-bubble.me {
@@ -224,17 +273,44 @@
             align-self: flex-end;
             border-bottom-left-radius: 18px;
             border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+        }
+
+        .chat-footer {
+            margin-top: auto;
+            border-top: 1px solid #222;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 5px;
+        }
+
+        .send-btn {
+            background: #333;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.1);
+            background: #444;
         }
 
         /* ===== BENTO GRID FEATURES ===== */
         .section {
-            padding: 160px 40px;
+            padding: 100px 40px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .section-header {
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             max-width: 800px;
         }
 
@@ -268,11 +344,13 @@
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
-            transition: border-color 0.4s ease;
+            transition: all 0.4s ease;
         }
 
         .bento-item:hover {
             border-color: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+            background: #252528;
         }
 
         .bento-item.large { grid-column: span 8; }
@@ -298,13 +376,19 @@
             color: rgba(255,255,255,0.05);
             width: 120px;
             height: 120px;
+            transition: all 0.4s ease;
+        }
+
+        .bento-item:hover .bento-icon {
+            color: rgba(255,255,255,0.1);
+            transform: scale(1.1);
         }
 
         /* ===== DARK SECTION CTA ===== */
         .final-cta {
             background: var(--white);
             color: var(--black);
-            padding: 120px 40px;
+            padding: 100px 40px;
             text-align: center;
             border-radius: 60px 60px 0 0;
         }
@@ -353,18 +437,6 @@
             gap: 60px;
         }
 
-        .footer-col h4 {
-            margin-bottom: 24px;
-            font-size: 14px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-        }
-
-        .footer-col ul { list-style: none; }
-        .footer-col li { margin-bottom: 12px; }
-        .footer-col a { color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.6; }
-        .footer-col a:hover { opacity: 1; }
-
         /* ===== ANIMATION CLASSES ===== */
         .reveal {
             opacity: 0;
@@ -381,6 +453,9 @@
             .nav-menu { display: none; }
             .bento-item.large, .bento-item.small { grid-column: span 12; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero { padding-top: 100px; }
+            .device-container { height: 550px; }
+            .iphone-mockup { width: 280px; height: 560px; }
         }
     </style>
 </head>
@@ -389,50 +464,71 @@
     <!-- NAVIGATION -->
     <nav id="mainNav">
         <div class="nav-container">
-            <a href="#" class="logo-box">
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="100" height="100" rx="24" fill="white"/>
-                    <path d="M50 30V40M35 45V70H65V45H35ZM35 45C35 36.7157 41.7157 30 50 30C58.2843 30 65 36.7157 65 45" stroke="black" stroke-width="6" stroke-linecap="round"/>
-                    <circle cx="50" cy="57" r="4" fill="black"/>
-                </svg>
-                <span>CrypteMoi</span>
-            </a>
+            <div style="font-weight: 800; font-size: 1.2rem; letter-spacing: -1px;">CrypteMoi</div>
+            
             <ul class="nav-menu">
                 <li><a href="#vision">Vision</a></li>
                 <li><a href="#technologie">Technologie</a></li>
                 <li><a href="#securite">Sécurité</a></li>
-                <li><a href="#communaute">Communauté</a></li>
+                <li><a href="#download">Télécharger</a></li>
             </ul>
-            <a href="#download" class="nav-cta">Ouvrir un compte</a>
+            <a href="#download" class="nav-cta">Obtenir l'App</a>
         </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- HERO SECTION -->
     <section class="hero">
-        <div class="hero-badge">Projet Souveraineté 2024</div>
-        <h1>L'ère de l'intégrité<br>numérique.</h1>
-        <p>CrypteMoi redéfinit les standards de la communication sécurisée. Une infrastructure impénétrable, au service de votre liberté.</p>
+        <div class="hero-content">
+            <div class="hero-badge">Liberté d'expression & Sécurité</div>
+            <h1>L'ère de l'intégrité<br>numérique.</h1>
+            <p>CrypteMoi redéfinit les standards. Pas de serveurs, pas de revente.<br>Votre vie privée est enfin respectée.</p>
+        </div>
         
         <div class="device-container">
             <div class="iphone-mockup" id="heroPhone">
                 <div class="iphone-screen">
                     <div class="app-header">
-                        <i data-lucide="menu"></i>
-                        <span style="font-weight: 600; font-size: 14px;">Messages</span>
-                        <i data-lucide="lock" style="width: 16px;"></i>
+                        <i data-lucide="chevron-left" style="width: 20px;"></i>
+                        <div style="text-align: center;">
+                            <div style="font-weight: 700; font-size: 14px;">Groupe Privé</div>
+                            <div style="font-size: 9px; color: #4ade80; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                                <span style="width: 4px; height: 4px; background: #4ade80; border-radius: 50%;"></span>
+                                Chiffrement actif
+                            </div>
+                        </div>
+                        <i data-lucide="shield" style="width: 18px; color: #4ade80;"></i>
                     </div>
-                    <div class="app-chat-bubble">
-                        Bienvenue sur l'infrastructure CrypteMoi. Votre clé est active.
+                    
+                    <div class="chat-container">
+                        <div class="chat-msg">
+                            <span class="user-label" style="color: #60a5fa;">Marc</span>
+                            <div class="app-chat-bubble">
+                                Mais notre vie privée est-elle respectée ici ?
+                            </div>
+                        </div>
+                        
+                        <div class="chat-msg" style="align-self: flex-end; display: flex; flex-direction: column; align-items: flex-end;">
+                            <span class="user-label" style="color: #fff; opacity: 0.5;">Vous</span>
+                            <div class="app-chat-bubble me">
+                                Où vont nos données ?
+                            </div>
+                        </div>
+                        
+                        <div class="chat-msg">
+                            <span class="user-label" style="color: #f472b6;">Léa</span>
+                            <div class="app-chat-bubble">
+                                Nos données ? Mais ils ne les ont pas ! Rien ne quitte nos téléphones.
+                            </div>
+                        </div>
                     </div>
-                    <div class="app-chat-bubble me">
-                        Merci. Est-ce que mes données sont stockées ?
-                    </div>
-                    <div class="app-chat-bubble">
-                        Négatif. Nous utilisons un protocole à connaissance nulle. Personne n'a accès à cet échange.
-                    </div>
-                    <div style="margin-top: auto; border-top: 1px solid #333; padding-top: 15px; display: flex; justify-content: space-between;">
-                        <span style="color: #666; font-size: 12px;">Écrire...</span>
-                        <i data-lucide="send" style="width: 18px; color: #fff;"></i>
+
+                    <div class="chat-footer">
+                        <div style="background: #1c1c1e; padding: 8px 15px; border-radius: 20px; flex-grow: 1; margin-right: 10px;">
+                            <span style="color: #666; font-size: 11px;">Message sécurisé...</span>
+                        </div>
+                        <div class="send-btn">
+                            <i data-lucide="lock" style="width: 16px; color: #fff;"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -443,38 +539,29 @@
     <section class="section" id="vision">
         <div class="section-header reveal">
             <span class="label">Ingénierie de pointe</span>
-            <h2>Une architecture sans compromis, conçue pour l'excellence.</h2>
+            <h2>Une architecture sans compromis.</h2>
         </div>
 
         <div class="bento-grid">
             <div class="bento-item large reveal">
-                <h3>Protocole Zero-Knowledge</h3>
-                <p>Nous ne traitons jamais vos données en clair. Les clés de déchiffrement résident exclusivement sur vos terminaux physiques.</p>
+                <h3>Souveraineté Totale</h3>
+                <p>L'appli n'est disponible que sur Google Play et App Store car nous exigeons la sécurité maximale. Aucune donnée n'est vendue.</p>
                 <i data-lucide="shield-check" class="bento-icon"></i>
             </div>
             <div class="bento-item small reveal">
                 <h3>Hardware ID</h3>
-                <p>Identification biométrique et lien matériel unique.</p>
+                <p>Détection d'appareil unique. Rien n'est enregistré sur un cloud externe.</p>
                 <i data-lucide="smartphone" class="bento-icon"></i>
             </div>
             <div class="bento-item small reveal">
-                <h3>Infrastructure FR</h3>
-                <p>Hébergement souverain conforme aux plus hautes exigences européennes.</p>
-                <i data-lucide="database" class="bento-icon"></i>
+                <h3>Zéro Inscription</h3>
+                <p>Pas de mail, pas de numéro. Votre matériel est votre seule identité.</p>
+                <i data-lucide="cpu" class="bento-icon"></i>
             </div>
             <div class="bento-item large reveal">
-                <h3>Discussions Ephémères</h3>
-                <p>Paramétrez l'autodestruction granulaire de vos échanges. Aucune trace, aucun historique résiduel sur les serveurs.</p>
-                <i data-lucide="zap" class="bento-icon"></i>
-            </div>
-            <div class="bento-item full reveal">
-                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                    <div>
-                        <h3>Liberté d'Expression Totale</h3>
-                        <p>Nos groupes publics ne sont soumis à aucune censure algorithmique. Vous êtes le seul maître de vos contenus.</p>
-                    </div>
-                    <i data-lucide="globe" style="width: 80px; height: 80px; opacity: 0.2;"></i>
-                </div>
+                <h3>Anonymat Garanti</h3>
+                <p>Aucune donnée collectée à l'installation. Votre cercle privé reste... privé.</p>
+                <i data-lucide="user-x" class="bento-icon"></i>
             </div>
         </div>
     </section>
@@ -484,9 +571,7 @@
         <div class="reveal">
             <span class="label" style="color: var(--black); opacity: 0.5;">Commencer l'expérience</span>
             <h2>Rejoignez le réseau.</h2>
-            <p style="margin-bottom: 40px; color: #666;">Disponible sur les plateformes officielles pour une sécurité vérifiée.</p>
-            
-            <div class="download-badges">
+            <div class="download-badges" style="margin-top: 40px;">
                 <a href="#" class="badge-btn">
                     <i data-lucide="apple"></i>
                     <div style="text-align: left;">
@@ -497,7 +582,7 @@
                 <a href="#" class="badge-btn">
                     <i data-lucide="play"></i>
                     <div style="text-align: left;">
-                        <div style="font-size: 10px; opacity: 0.7;">Get it on</div>
+                        <div style="font-size: 10px; opacity: 0.7;">Disponible sur</div>
                         <div style="font-size: 16px; font-weight: 700;">Google Play</div>
                     </div>
                 </a>
@@ -509,91 +594,64 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <a href="#" class="logo-box" style="margin-bottom: 24px;">
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="100" height="100" rx="24" fill="white"/>
-                        <path d="M50 30V40M35 45V70H65V45H35ZM35 45C35 36.7157 41.7157 30 50 30C58.2843 30 65 36.7157 65 45" stroke="black" stroke-width="6" stroke-linecap="round"/>
-                    </svg>
-                    <span>CrypteMoi</span>
-                </a>
-                <p style="font-size: 14px; opacity: 0.5; max-width: 300px;">La nouvelle norme mondiale pour des communications privées, sécurisées et souveraines.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Produit</h4>
-                <ul>
-                    <li><a href="#">Fonctionnalités</a></li>
-                    <li><a href="#">Sécurité</a></li>
-                    <li><a href="#">Infrastructure</a></li>
-                </ul>
+                <div style="margin-bottom: 24px; font-weight: 800; font-size: 20px;">CrypteMoi</div>
+                <p style="font-size: 14px; opacity: 0.5; max-width: 300px;">Communications souveraines sans collecte de données.</p>
             </div>
             <div class="footer-col">
                 <h4>Légal</h4>
                 <ul>
                     <li><a href="#">Confidentialité</a></li>
-                    <li><a href="#">CGU</a></li>
-                    <li><a href="#">Transparence</a></li>
+                    <li><a href="#">Conditions</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Support</h4>
                 <ul>
-                    <li><a href="#">Centre d'aide</a></li>
+                    <li><a href="#">Aide</a></li>
                     <li><a href="#">Contact</a></li>
-                    <li><a href="#">Status</a></li>
                 </ul>
             </div>
         </div>
-        <div style="max-width: 1200px; margin: 60px auto 0; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 12px; opacity: 0.4; text-align: center;">
-            &copy; 2024 CrypteMoi Technologies. Conçu avec rigueur en France.
+        <div style="max-width: 1200px; margin: 60px auto 0; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 11px; opacity: 0.4; text-align: center;">
+            &copy; 2024 CrypteMoi. Votre vie privée n'est pas à vendre.
         </div>
     </footer>
 
     <script>
-        // Initialisation des icônes Lucide
+        // Initialisation Lucide
         lucide.createIcons();
 
-        // Animation Navbar au scroll
+        // Navbar Scroll Effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+            nav.classList.toggle('scrolled', window.scrollY > 50);
         });
 
-        // Animation du téléphone au mouvement de souris
+        // 3D Tilt Effect + Cursor Follower
         const phone = document.getElementById('heroPhone');
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 40;
-            const y = (window.innerHeight / 2 - e.pageY) / 40;
-            phone.style.transform = `rotateX(${10 + y}deg) rotateY(${-x}deg)`;
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            
+            // On combine l'animation de flottement avec le mouvement de la souris
+            phone.style.transform = `rotateX(${5 + y}deg) rotateY(${-x}deg)`;
         });
 
-        // Scroll Reveal Logic
-        const observerOptions = {
-            threshold: 0.15
-        };
+        // Reset transform on mouse leave
+        document.addEventListener('mouseleave', () => {
+            phone.style.transform = `rotateX(5deg) rotateY(0deg)`;
+        });
 
+        // Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Smooth scroll for nav links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
     </script>
 </body>
 </html>
